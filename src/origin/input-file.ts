@@ -1,0 +1,84 @@
+import type { IPublicTypeComponentDescription } from '@webank/letgo-types';
+import { FesDesignName, FesDesignVersion } from './constants';
+
+const meta: IPublicTypeComponentDescription = {
+    title: '文件选择',
+    componentName: 'FInputFile',
+    npm: {
+        package: FesDesignName,
+        version: FesDesignVersion,
+        exportName: 'FInputFile',
+        destructuring: true,
+    },
+    configure: {
+        component: {
+            isContainer: true,
+        },
+        props: [
+            {
+                name: 'v-model',
+                title: '绑定变量',
+                setter: 'VariableSetter',
+            },
+            {
+                name: 'multiple',
+                title: '可多选',
+                setter: 'BoolSetter',
+                defaultValue: false,
+            },
+            {
+                name: 'disabled',
+                title: '禁用',
+                setter: 'BoolSetter',
+                defaultValue: false,
+            },
+            {
+                name: 'accept',
+                title: '文件类型',
+                setter: {
+                    componentName: 'ArraySetter',
+                    props: {
+                        itemSetter: {
+                            componentName: 'StringSetter',
+                            props: { placeholder: 'image/*' },
+                            isRequired: false,
+                            defaultValue: '',
+                        },
+                    },
+                    defaultValue: [],
+                },
+            },
+            {
+                name: '_fileList',
+                title: '文件列表',
+                setter: 'SlotSetter',
+                defaultValue: {
+                    type: 'JSSlot',
+                    title: '文件列表',
+                    name: 'fileList',
+                    value: [],
+                },
+            },
+        ],
+        supports: {
+            events: [
+                {
+                    name: 'onChange',
+                    params: [
+                        {
+                            name: 'files',
+                            type: 'File[]',
+                        },
+                    ],
+                },
+            ],
+            style: true,
+            class: true,
+        },
+    },
+    group: '原子组件',
+    category: '数据录入',
+    priority: 0,
+};
+
+export default meta;
