@@ -1,0 +1,1 @@
+{"version":3,"file":"node-instance.d.ts","sourceRoot":"","sources":["../../src/type/node-instance.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EACR,gBAAgB,EAChB,0BAA0B,EAC7B,MAAM,IAAI,CAAC;AAEZ,MAAM,WAAW,uBAAuB,CACpC,CAAC,GAAG,0BAA0B,EAC9B,IAAI,GAAG,gBAAgB;IAEvB,KAAK,EAAE,MAAM,CAAA;IACb,MAAM,EAAE,MAAM,CAAA;IACd,QAAQ,EAAE,CAAC,CAAA;IACX,IAAI,CAAC,EAAE,IAAI,GAAG,IAAI,CAAA;CACrB"}

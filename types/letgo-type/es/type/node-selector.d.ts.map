@@ -1,0 +1,1 @@
+{"version":3,"file":"node-selector.d.ts","sourceRoot":"","sources":["../../src/type/node-selector.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EACR,gBAAgB,EAChB,0BAA0B,EAC7B,MAAM,IAAI,CAAC;AAEZ,MAAM,WAAW,uBAAuB,CAAC,IAAI,GAAG,gBAAgB;IAC5D,IAAI,EAAE,IAAI,CAAA;IACV,QAAQ,CAAC,EAAE,0BAA0B,CAAA;CACxC"}

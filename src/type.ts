@@ -229,7 +229,7 @@ export interface IComponentMetadata {
          * @example [{ parent: 'FForm', description: '表单场景下必须放在表单组件内' }]
          */
         restrictions?: Array<{
-            parent: string
+            parent: string | RegExp
             description: string
         }>
     }
@@ -238,7 +238,7 @@ export interface IComponentMetadata {
      * 组件允许的子组件类型列表
      * @example ['FMenuItem', 'FSubMenu']
      */
-    children?: string[]
+    children?: Array<string | RegExp>
 
     /**
      * 组件的使用场景和最佳实践说明

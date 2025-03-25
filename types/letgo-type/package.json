@@ -1,0 +1,24 @@
+{
+    "name": "@webank/letgo-types",
+    "type": "module",
+    "version": "1.4.1",
+    "description": "",
+    "author": "",
+    "license": "ISC",
+    "keywords": [],
+    "sideEffects": false,
+    "module": "es/index.js",
+    "types": "./es/index.d.ts",
+    "files": [
+        "es",
+        "lib"
+    ],
+    "dependencies": {
+        "@webank/aide-core": "^0.0.6",
+        "eventemitter3": "^5.0.1",
+        "strict-event-emitter-types": "^2.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

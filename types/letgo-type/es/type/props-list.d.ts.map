@@ -1,0 +1,1 @@
+{"version":3,"file":"props-list.d.ts","sourceRoot":"","sources":["../../src/type/props-list.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,yBAAyB,EAAE,MAAM,IAAI,CAAC;AAEpD,MAAM,MAAM,oBAAoB,GAAG,KAAK,CAAC;IACrC,IAAI,CAAC,EAAE,MAAM,CAAA;IACb,KAAK,EAAE,yBAAyB,CAAA;CACnC,CAAC,CAAC"}

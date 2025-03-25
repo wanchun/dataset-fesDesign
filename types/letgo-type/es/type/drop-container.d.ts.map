@@ -1,0 +1,1 @@
+{"version":3,"file":"drop-container.d.ts","sourceRoot":"","sources":["../../src/type/drop-container.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,gBAAgB,EAAE,0BAA0B,EAAE,MAAM,IAAI,CAAC;AAEvE,MAAM,WAAW,wBAAwB,CACrC,IAAI,GAAG,gBAAgB;IAEvB,SAAS,EAAE,IAAI,CAAA;IACf,QAAQ,EAAE,0BAA0B,CAAA;CACvC"}

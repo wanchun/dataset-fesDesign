@@ -1,0 +1,1 @@
+{"version":3,"file":"node.d.ts","sourceRoot":"","sources":["../../src/event/node.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,IAAI,MAAM,QAAQ,CAAC;AAE/B,MAAM,WAAW,0BAA0B;IACvC,IAAI,EAAE,MAAM,CAAA;IACZ,aAAa,CAAC,EAAE,MAAM,CAAA;IACtB,IAAI,CAAC,EAAE,MAAM,CAAA;IACb,SAAS,CAAC,EAAE,MAAM,CAAA;CACrB;AAED,eAAO,MAAM,QAAQ,kBAAkB,CAAC"}

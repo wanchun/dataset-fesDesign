@@ -1,0 +1,1 @@
+{"version":3,"file":"block-schema.d.ts","sourceRoot":"","sources":["../../../src/type/schema/block-schema.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,0BAA0B,EAAE,MAAM,OAAO,CAAC;AAExD;;GAEG;AACH,MAAM,WAAW,sBAAuB,SAAQ,0BAA0B;IACtE,aAAa,EAAE,OAAO,CAAC;CAC1B"}

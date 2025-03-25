@@ -1,0 +1,1 @@
+{"version":3,"file":"node-data.d.ts","sourceRoot":"","sources":["../../../src/type/schema/node-data.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EACR,kBAAkB,EAClB,mBAAmB,EACnB,uBAAuB,EACvB,qBAAqB,EACxB,MAAM,OAAO,CAAC;AAEf,MAAM,MAAM,mBAAmB,GAAG,qBAAqB,GAAG,uBAAuB,GAAG,kBAAkB,GAAG,mBAAmB,CAAC"}

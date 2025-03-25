@@ -1,0 +1,1 @@
+{"version":3,"file":"location-prop-detail.d.ts","sourceRoot":"","sources":["../../src/type/location-prop-detail.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EACR,yBAAyB,EAC5B,MAAM,IAAI,CAAC;AAEZ,MAAM,WAAW,6BAA6B;IAE1C,IAAI,EAAE,yBAAyB,CAAC,IAAI,CAAA;IACpC,IAAI,EAAE,MAAM,CAAA;IACZ,OAAO,CAAC,EAAE,WAAW,CAAA;CACxB"}

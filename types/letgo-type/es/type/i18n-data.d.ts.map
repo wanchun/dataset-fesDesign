@@ -1,0 +1,1 @@
+{"version":3,"file":"i18n-data.d.ts","sourceRoot":"","sources":["../../src/type/i18n-data.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,uBAAuB,EAAE,MAAM,IAAI,CAAC;AAElD,MAAM,WAAW,mBAAmB;IAChC,IAAI,EAAE,MAAM,CAAC;IACb;;OAEG;IACH,GAAG,EAAE,MAAM,CAAC;IACZ;;OAEG;IACH,MAAM,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,GAAG,MAAM,GAAG,uBAAuB,CAAC,CAAC;CACtE"}
