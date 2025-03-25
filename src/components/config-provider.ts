@@ -9,7 +9,7 @@ export const configProviderMeta: IComponentMetadata = {
         '多语言支持：通过locale属性配置组件库的国际化语言包，支持多语言切换',
         '容器挂载：通过getContainer指定弹出类组件的挂载节点，统一管理弹窗层级',
         '全局样式：统一配置组件库的基础样式，如字体、颜色、间距等',
-        '默认行为：设置组件的默认交互行为，如加载状态、动画效果等'
+        '默认行为：设置组件的默认交互行为，如加载状态、动画效果等',
     ],
     parent: {
         types: ['container'],
@@ -22,9 +22,9 @@ export const configProviderMeta: IComponentMetadata = {
             effect: '主题样式变更时需要同步调整语言包中的样式相关词汇',
             notes: [
                 '仅影响包含样式描述的国际化词条',
-                '建议主题切换时同步更新相关的语言描述'
-            ]
-        }
+                '建议主题切换时同步更新相关的语言描述',
+            ],
+        },
     ],
     props: [
         {
@@ -37,18 +37,18 @@ export const configProviderMeta: IComponentMetadata = {
                         name: 'common',
                         title: '通用配置',
                         propType: 'object',
-                        description: '组件库通用样式配置，如主色、圆角等'
+                        description: '组件库通用样式配置，如主色、圆角等',
                     },
                     {
                         name: 'components',
                         title: '组件配置',
                         propType: 'object',
-                        description: '各组件的样式变量配置'
-                    }
-                ]
+                        description: '各组件的样式变量配置',
+                    },
+                ],
             },
             description: '覆盖组件库默认主题样式，支持通用配置和组件级配置',
-            defaultValue: {}
+            defaultValue: {},
         },
         {
             name: 'locale',
@@ -62,29 +62,29 @@ export const configProviderMeta: IComponentMetadata = {
                             name: 'language',
                             title: '语言代码',
                             propType: 'string',
-                            description: '语言包标识符'
+                            description: '语言包标识符',
                         },
                         {
                             name: 'messages',
                             title: '语言文案',
                             propType: 'object',
-                            description: '自定义语言包内容'
-                        }
-                    ]
-                }]
+                            description: '自定义语言包内容',
+                        },
+                    ],
+                }],
             },
             description: '国际化语言包配置，支持预设语言代码或自定义语言包',
-            defaultValue: 'zh-CN'
+            defaultValue: 'zh-CN',
         },
         {
             name: 'getContainer',
             title: '挂载容器',
             propType: {
                 type: 'oneOfType',
-                value: ['func', 'string']
+                value: ['func', 'string'],
             },
             description: '指定弹出类组件的挂载容器节点，可以是函数或者选择器字符串',
-            defaultValue: '() => document.body'
-        }
-    ]
+            defaultValue: '() => document.body',
+        },
+    ],
 };

@@ -1,5 +1,5 @@
-import { SchemaTransformer } from './transform'
+import { SchemaTransformer } from './transform';
 
-const runner = new SchemaTransformer()
+const runner = new SchemaTransformer();
 
-runner.transformDirectory('./transformed-temp')
+runner.transformDirectory('./tmp');

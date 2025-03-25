@@ -1,8 +1,8 @@
-import { buttonMeta } from './button'
-import { configProviderMeta } from './config-provider'
-import { drawerMeta } from './drawer'
-import { selectMeta } from './select'
-import { floatPaneMeta } from './float-pane'
+import { buttonMeta } from './button';
+import { configProviderMeta } from './config-provider';
+import { drawerMeta } from './drawer';
+import { floatPaneMeta } from './float-pane';
+import { selectMeta } from './select';
 
 export default [
     buttonMeta,
@@ -10,4 +10,4 @@ export default [
     drawerMeta,
     floatPaneMeta,
     selectMeta,
-]
+];

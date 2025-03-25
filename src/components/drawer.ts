@@ -1,4 +1,4 @@
-import { IComponentMetadata } from '../type';
+import type { IComponentMetadata } from '../type';
 
 export const drawerMeta: IComponentMetadata = {
     title: '抽屉',
@@ -10,7 +10,7 @@ export const drawerMeta: IComponentMetadata = {
         '高级筛选：展开抽屉显示更多的筛选条件和选项',
         '临时操作面板：需要执行一系列相关操作时，在侧边展开操作面板',
         '配置界面：展示应用设置、个性化配置等需要独立空间的内容',
-        '预览窗口：在不跳转页面的情况下预览文档、图片等内容'
+        '预览窗口：在不跳转页面的情况下预览文档、图片等内容',
     ],
     parent: {
         types: ['container', 'layout'],
@@ -24,8 +24,8 @@ export const drawerMeta: IComponentMetadata = {
             notes: [
                 '当displayDirective为if时，组件会在show为false时被销毁',
                 '当displayDirective为show时，组件会被缓存而不销毁',
-                '频繁切换的场景建议使用show以提高性能'
-            ]
+                '频繁切换的场景建议使用show以提高性能',
+            ],
         },
         {
             source: 'placement',
@@ -34,8 +34,8 @@ export const drawerMeta: IComponentMetadata = {
             notes: [
                 '当placement为top/bottom时，通过height控制抽屉高度',
                 '当placement为left/right时，通过width控制抽屉宽度',
-                '建议根据内容类型选择合适的方向和尺寸'
-            ]
+                '建议根据内容类型选择合适的方向和尺寸',
+            ],
         },
         {
             source: 'mask',
@@ -43,9 +43,9 @@ export const drawerMeta: IComponentMetadata = {
             effect: '蒙层与点击关闭的关联',
             notes: [
                 '只有开启mask时maskClosable配置才有效',
-                '建议保持开启以提供更好的交互体验'
-            ]
-        }
+                '建议保持开启以提供更好的交互体验',
+            ],
+        },
     ],
     props: [
         {
@@ -54,7 +54,7 @@ export const drawerMeta: IComponentMetadata = {
             propType: 'bool',
             description: '控制抽屉是否显示',
             defaultValue: false,
-            required: true
+            required: true,
         },
         {
             name: 'displayDirective',
@@ -65,44 +65,44 @@ export const drawerMeta: IComponentMetadata = {
                     {
                         name: 'show',
                         title: '显示/隐藏',
-                        usage: '组件会被缓存，适用于频繁切换的场景'
+                        usage: '组件会被缓存，适用于频繁切换的场景',
                     },
                     {
                         name: 'if',
                         title: '条件渲染',
-                        usage: '组件会被销毁，适用于内容较重的场景'
-                    }
-                ]
+                        usage: '组件会被销毁，适用于内容较重的场景',
+                    },
+                ],
             },
             description: '控制抽屉的渲染方式',
-            defaultValue: 'show'
+            defaultValue: 'show',
         },
         {
             name: 'closable',
             title: '可关闭',
             propType: 'bool',
             description: '是否显示关闭按钮',
-            defaultValue: true
+            defaultValue: true,
         },
         {
             name: 'mask',
             title: '蒙层',
             propType: 'bool',
             description: '是否显示遮罩层',
-            defaultValue: true
+            defaultValue: true,
         },
         {
             name: 'maskClosable',
             title: '点击蒙层关闭',
             propType: 'bool',
             description: '是否允许点击蒙层关闭抽屉',
-            defaultValue: true
+            defaultValue: true,
         },
         {
             name: 'title',
             title: '标题',
             propType: 'string',
-            description: '抽屉的标题文本'
+            description: '抽屉的标题文本',
         },
         {
             name: 'placement',
@@ -113,76 +113,76 @@ export const drawerMeta: IComponentMetadata = {
                     {
                         name: 'top',
                         title: '顶部',
-                        usage: '从顶部滑出，适用于展示横向布局的内容'
+                        usage: '从顶部滑出，适用于展示横向布局的内容',
                     },
                     {
                         name: 'bottom',
                         title: '底部',
-                        usage: '从底部滑出，适用于移动端的操作面板'
+                        usage: '从底部滑出，适用于移动端的操作面板',
                     },
                     {
                         name: 'left',
                         title: '左侧',
-                        usage: '从左侧滑出，适用于导航菜单等场景'
+                        usage: '从左侧滑出，适用于导航菜单等场景',
                     },
                     {
                         name: 'right',
                         title: '右侧',
-                        usage: '从右侧滑出，适用于详情展示等场景'
-                    }
-                ]
+                        usage: '从右侧滑出，适用于详情展示等场景',
+                    },
+                ],
             },
             description: '抽屉弹出的方向',
-            defaultValue: 'right'
+            defaultValue: 'right',
         },
         {
             name: 'height',
             title: '高度',
             propType: 'number',
             description: '抽屉的高度，在placement为top/bottom时生效',
-            defaultValue: 340
+            defaultValue: 340,
         },
         {
             name: 'width',
             title: '宽度',
             propType: 'number',
             description: '抽屉的宽度，在placement为left/right时生效',
-            defaultValue: 378
+            defaultValue: 378,
         },
         {
             name: 'footer',
             title: '底部',
             propType: 'bool',
             description: '是否显示底部操作栏',
-            defaultValue: false
+            defaultValue: false,
         },
         {
             name: 'okText',
             title: '确认按钮文字',
             propType: 'string',
             description: '确认按钮的文本内容',
-            defaultValue: '确定'
+            defaultValue: '确定',
         },
         {
             name: 'cancelText',
             title: '取消按钮文字',
             propType: 'string',
             description: '取消按钮的文本内容',
-            defaultValue: '取消'
+            defaultValue: '取消',
         },
         {
             name: 'contentClass',
             title: '内容样式名称',
             propType: 'string',
-            description: '自定义内容区域的样式类名'
+            description: '自定义内容区域的样式类名',
         },
         {
             name: 'getContainer',
             title: '挂载节点',
             propType: 'func',
             description: '指定抽屉挂载的HTML节点',
-            defaultValue: '() => document.body'
-        }
+            defaultValue: '() => document.body',
+        },
     ],
     events: [
         {
@@ -192,9 +192,9 @@ export const drawerMeta: IComponentMetadata = {
                 {
                     name: 'visible',
                     type: 'boolean',
-                    description: '当前的显示状态'
-                }
-            ]
+                    description: '当前的显示状态',
+                },
+            ],
         },
         {
             name: 'onOk',
@@ -203,9 +203,9 @@ export const drawerMeta: IComponentMetadata = {
                 {
                     name: 'event',
                     type: 'Event',
-                    description: '点击事件对象'
-                }
-            ]
+                    description: '点击事件对象',
+                },
+            ],
         },
         {
             name: 'onCancel',
@@ -214,9 +214,9 @@ export const drawerMeta: IComponentMetadata = {
                 {
                     name: 'event',
                     type: 'Event',
-                    description: '点击事件对象'
-                }
-            ]
+                    description: '点击事件对象',
+                },
+            ],
         },
         {
             name: 'onAfterEnter',
@@ -225,9 +225,9 @@ export const drawerMeta: IComponentMetadata = {
                 {
                     name: 'el',
                     type: 'Element',
-                    description: '抽屉DOM元素'
-                }
-            ]
+                    description: '抽屉DOM元素',
+                },
+            ],
         },
         {
             name: 'onAfterLeave',
@@ -236,24 +236,24 @@ export const drawerMeta: IComponentMetadata = {
                 {
                     name: 'el',
                     type: 'Element',
-                    description: '抽屉DOM元素'
-                }
-            ]
-        }
+                    description: '抽屉DOM元素',
+                },
+            ],
+        },
     ],
     slots: [
         {
             name: 'default',
             description: '抽屉的主要内容区域',
-            required: true
+            required: true,
         },
         {
             name: 'title',
-            description: '自定义标题内容'
+            description: '自定义标题内容',
         },
         {
             name: 'footer',
-            description: '自定义底部内容'
-        }
-    ]
+            description: '自定义底部内容',
+        },
+    ],
 };

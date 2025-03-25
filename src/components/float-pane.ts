@@ -1,4 +1,4 @@
-import { IComponentMetadata } from '../type';
+import type { IComponentMetadata } from '../type';
 
 export const floatPaneMeta: IComponentMetadata = {
     title: '浮动面板',
@@ -10,7 +10,7 @@ export const floatPaneMeta: IComponentMetadata = {
         '悬浮窗口：创建可拖拽的独立窗口，支持多窗口并行展示，适用于多任务处理场景',
         '配置面板：展示应用配置、个性化设置等可调整位置的面板，提供更灵活的操作体验',
         '辅助工具：放置频繁使用的功能模块，用户可以根据使用习惯自定义位置',
-        '状态监控：展示系统状态、性能指标等需要持续关注的信息面板'
+        '状态监控：展示系统状态、性能指标等需要持续关注的信息面板',
     ],
     parent: {
         types: ['container', 'layout'],
@@ -24,8 +24,8 @@ export const floatPaneMeta: IComponentMetadata = {
             notes: [
                 '当visible为false时，根据displayDirective决定是否保留DOM',
                 'show模式下保留DOM但隐藏，适用于频繁切换的场景',
-                'if模式下直接移除DOM，适用于内容较重的场景'
-            ]
+                'if模式下直接移除DOM，适用于内容较重的场景',
+            ],
         },
         {
             source: 'resizable',
@@ -33,8 +33,8 @@ export const floatPaneMeta: IComponentMetadata = {
             effect: '尺寸调整的约束关系',
             notes: [
                 '启用尺寸调整时，可以通过min/max配置限制调整范围',
-                '建议设置合理的尺寸范围避免影响用户体验'
-            ]
+                '建议设置合理的尺寸范围避免影响用户体验',
+            ],
         },
         {
             source: 'cachePosition',
@@ -42,9 +42,9 @@ export const floatPaneMeta: IComponentMetadata = {
             effect: '位置缓存的依赖关系',
             notes: [
                 '启用位置缓存时必须提供cacheKey',
-                'cacheKey用于标识不同面板的缓存数据'
-            ]
-        }
+                'cacheKey用于标识不同面板的缓存数据',
+            ],
+        },
     ],
     props: [
         {
@@ -52,7 +52,7 @@ export const floatPaneMeta: IComponentMetadata = {
             title: '显示状态',
             propType: 'bool',
             description: '控制面板的显示/隐藏状态',
-            defaultValue: true
+            defaultValue: true,
         },
         {
             name: 'displayDirective',
@@ -63,24 +63,24 @@ export const floatPaneMeta: IComponentMetadata = {
                     {
                         name: 'if',
                         title: '条件渲染',
-                        usage: '适用于内容较重的场景，隐藏时直接移除DOM'
+                        usage: '适用于内容较重的场景，隐藏时直接移除DOM',
                     },
                     {
                         name: 'show',
                         title: '显示隐藏',
-                        usage: '适用于频繁切换的场景，隐藏时保留DOM'
-                    }
-                ]
+                        usage: '适用于频繁切换的场景，隐藏时保留DOM',
+                    },
+                ],
             },
             description: '控制面板显示/隐藏的渲染方式',
-            defaultValue: 'show'
+            defaultValue: 'show',
         },
         {
             name: 'draggable',
             title: '可拖拽',
             propType: 'bool',
             description: '是否允许通过拖拽调整面板位置',
-            defaultValue: true
+            defaultValue: true,
         },
         {
             name: 'defaultPosition',
@@ -92,88 +92,88 @@ export const floatPaneMeta: IComponentMetadata = {
                         name: 'x',
                         title: 'X坐标',
                         propType: 'number',
-                        description: '面板的水平位置坐标'
+                        description: '面板的水平位置坐标',
                     },
                     {
                         name: 'y',
                         title: 'Y坐标',
                         propType: 'number',
-                        description: '面板的垂直位置坐标'
-                    }
-                ]
+                        description: '面板的垂直位置坐标',
+                    },
+                ],
             },
-            description: '面板的默认显示位置'
+            description: '面板的默认显示位置',
         },
         {
             name: 'resizable',
             title: '可调整大小',
             propType: 'bool',
             description: '是否允许调整面板大小',
-            defaultValue: false
+            defaultValue: false,
         },
         {
             name: 'minWidth',
             title: '最小宽度',
             propType: 'number',
             description: '面板可调整的最小宽度',
-            defaultValue: 200
+            defaultValue: 200,
         },
         {
             name: 'maxWidth',
             title: '最大宽度',
             propType: 'number',
             description: '面板可调整的最大宽度',
-            defaultValue: 800
+            defaultValue: 800,
         },
         {
             name: 'minHeight',
             title: '最小高度',
             propType: 'number',
             description: '面板可调整的最小高度',
-            defaultValue: 100
+            defaultValue: 100,
         },
         {
             name: 'maxHeight',
             title: '最大高度',
             propType: 'number',
             description: '面板可调整的最大高度',
-            defaultValue: 600
+            defaultValue: 600,
         },
         {
             name: 'cachePosition',
             title: '缓存位置',
             propType: 'bool',
             description: '是否缓存面板位置，下次打开时恢复到上次的位置',
-            defaultValue: false
+            defaultValue: false,
         },
         {
             name: 'cacheKey',
             title: '缓存标识',
             propType: 'string',
             description: '位置缓存的唯一标识，当cachePosition为true时必填',
-            required: false
+            required: false,
         },
         {
             name: 'zIndex',
             title: '层级',
             propType: 'number',
             description: '面板的层叠顺序',
-            defaultValue: 1000
+            defaultValue: 1000,
         },
         {
             name: 'mask',
             title: '遮罩',
             propType: 'bool',
             description: '是否显示遮罩层',
-            defaultValue: false
+            defaultValue: false,
         },
         {
             name: 'maskClosable',
             title: '点击遮罩关闭',
             propType: 'bool',
             description: '是否允许点击遮罩层关闭面板',
-            defaultValue: true
-        }
+            defaultValue: true,
+        },
     ],
     events: [
         {
@@ -183,14 +183,14 @@ export const floatPaneMeta: IComponentMetadata = {
                 {
                     name: 'event',
                     type: 'DragEvent',
-                    description: '拖拽事件对象'
+                    description: '拖拽事件对象',
                 },
                 {
                     name: 'position',
                     type: '{ x: number, y: number }',
-                    description: '开始拖拽时的位置坐标'
-                }
-            ]
+                    description: '开始拖拽时的位置坐标',
+                },
+            ],
         },
         {
             name: 'onDragEnd',
@@ -199,14 +199,14 @@ export const floatPaneMeta: IComponentMetadata = {
                 {
                     name: 'event',
                     type: 'DragEvent',
-                    description: '拖拽事件对象'
+                    description: '拖拽事件对象',
                 },
                 {
                     name: 'position',
                     type: '{ x: number, y: number }',
-                    description: '结束拖拽时的位置坐标'
-                }
-            ]
+                    description: '结束拖拽时的位置坐标',
+                },
+            ],
         },
         {
             name: 'onResizeStart',
@@ -215,14 +215,14 @@ export const floatPaneMeta: IComponentMetadata = {
                 {
                     name: 'event',
                     type: 'MouseEvent',
-                    description: '鼠标事件对象'
+                    description: '鼠标事件对象',
                 },
                 {
                     name: 'size',
                     type: '{ width: number, height: number }',
-                    description: '开始调整时的尺寸'
-                }
-            ]
+                    description: '开始调整时的尺寸',
+                },
+            ],
         },
         {
             name: 'onResizeEnd',
@@ -231,14 +231,14 @@ export const floatPaneMeta: IComponentMetadata = {
                 {
                     name: 'event',
                     type: 'MouseEvent',
-                    description: '鼠标事件对象'
+                    description: '鼠标事件对象',
                 },
                 {
                     name: 'size',
                     type: '{ width: number, height: number }',
-                    description: '调整后的尺寸'
-                }
-            ]
+                    description: '调整后的尺寸',
+                },
+            ],
         },
         {
             name: 'onClose',
@@ -247,26 +247,26 @@ export const floatPaneMeta: IComponentMetadata = {
                 {
                     name: 'event',
                     type: 'MouseEvent',
-                    description: '鼠标事件对象'
-                }
-            ]
-        }
+                    description: '鼠标事件对象',
+                },
+            ],
+        },
     ],
     slots: [
         {
             name: 'default',
             description: '面板的主要内容区域',
-            required: true
+            required: true,
         },
         {
             name: 'header',
             description: '面板的头部区域，可用于自定义标题栏',
-            required: false
+            required: false,
         },
         {
             name: 'footer',
             description: '面板的底部区域，可用于放置操作按钮',
-            required: false
-        }
-    ]
+            required: false,
+        },
+    ],
 };

@@ -1,6 +1,6 @@
-import { IComponentMetadata } from '../type';
+import type { IComponentMetadata } from '../type';
 
-export const buttonMeta:IComponentMetadata = {
+export const buttonMeta: IComponentMetadata = {
     title: '按钮',
     componentName: 'FButton',
     description: '基础按钮组件，用于在用户界面中触发各种操作。支持多种样式和状态，适用于表单提交、对话框确认等场景。',
@@ -13,20 +13,20 @@ export const buttonMeta:IComponentMetadata = {
         '危险操作：使用danger类型按钮执行删除等危险操作，明确警示用户。',
         '信息提示：使用info类型按钮展示提示信息，提供友好的用户反馈。',
         '成功提示：使用success类型按钮展示成功信息，增强用户操作信心。',
-        '警告提示：使用warning类型按钮展示警告信息，提醒用户注意潜在风险。'
+        '警告提示：使用warning类型按钮展示警告信息，提醒用户注意潜在风险。',
     ],
     parent: {
         types: ['container', 'layout'],
         restrictions: [
             {
                 parent: 'FFormItem',
-                description: '表单项场景下必须放在表单项组件内'
+                description: '表单项场景下必须放在表单项组件内',
             },
             {
                 parent: 'FSpace',
-                description: '间距布局场景下必须放在间距组件内'
-            }
-        ]
+                description: '间距布局场景下必须放在间距组件内',
+            },
+        ],
     },
     children: [],
     propRelations: [
@@ -36,9 +36,9 @@ export const buttonMeta:IComponentMetadata = {
             effect: 'loading状态时禁用点击',
             notes: [
                 '当按钮处于加载状态时自动禁用点击',
-                '适用于异步提交场景防止重复提交'
-            ]
-        }
+                '适用于异步提交场景防止重复提交',
+            ],
+        },
     ],
     props: [
         {
@@ -52,7 +52,7 @@ export const buttonMeta:IComponentMetadata = {
             title: '禁用状态',
             propType: 'bool',
             description: '是否禁用按钮',
-            defaultValue: false
+            defaultValue: false,
         },
         {
             name: 'size',
@@ -60,25 +60,25 @@ export const buttonMeta:IComponentMetadata = {
             propType: {
                 type: 'oneOf',
                 items: [
-                    { 
-                        name: 'small', 
+                    {
+                        name: 'small',
                         title: '小',
-                        usage: '紧凑场景使用，如表单内联按钮'
+                        usage: '紧凑场景使用，如表单内联按钮',
                     },
-                    { 
-                        name: 'middle', 
+                    {
+                        name: 'middle',
                         title: '中',
-                        usage: '常规尺寸，适合大多数场景'
+                        usage: '常规尺寸，适合大多数场景',
                     },
-                    { 
-                        name: 'large', 
+                    {
+                        name: 'large',
                         title: '大',
-                        usage: '需要突出操作的页面重点区域'
-                    }
-                ]
+                        usage: '需要突出操作的页面重点区域',
+                    },
+                ],
             },
             description: '按钮的尺寸大小，影响按钮的展示尺寸',
-            defaultValue: 'middle'
+            defaultValue: 'middle',
         },
         {
             name: 'htmlType',
@@ -87,32 +87,32 @@ export const buttonMeta:IComponentMetadata = {
                 type: 'oneOf',
                 items: [
                     { name: 'button', title: '普通按钮', usage: '常规按钮交互场景，点击时触发onClick事件' },
-                    { name: 'submit', title: '提交按钮', usage: '表单提交场景，点击时自动触发表单的submit事件' }
-                ]
+                    { name: 'submit', title: '提交按钮', usage: '表单提交场景，点击时自动触发表单的submit事件' },
+                ],
             },
             description: '设置按钮的原生type属性，影响按钮的默认行为',
-            defaultValue: 'button'
+            defaultValue: 'button',
         },
         {
             name: 'loading',
             title: '加载状态',
             propType: 'bool',
             description: '是否显示加载中状态',
-            defaultValue: false
+            defaultValue: false,
         },
         {
             name: 'long',
             title: '长按钮',
             propType: 'bool',
             description: '是否显示为长按钮',
-            defaultValue: false
+            defaultValue: false,
         },
         {
             name: 'throttle',
             title: '节流时间',
             propType: 'number',
             description: '点击事件的节流时间（毫秒），在指定时间间隔内重复点击只会触发一次回调，用于防止重复提交',
-            defaultValue: 300
+            defaultValue: 300,
         },
         {
             name: 'type',
@@ -127,14 +127,13 @@ export const buttonMeta:IComponentMetadata = {
                     { name: 'info', title: '信息', usage: '用于展示信息的按钮样式，传达中性的信息状态' },
                     { name: 'success', title: '成功', usage: '表示成功状态的按钮样式，用于操作成功的反馈' },
                     { name: 'warning', title: '警告', usage: '表示警告状态的按钮样式，提醒用户需要注意' },
-                    { name: 'danger', title: '危险', usage: '表示危险操作的按钮样式，如删除等破坏性操作' }
-                ]
+                    { name: 'danger', title: '危险', usage: '表示危险操作的按钮样式，如删除等破坏性操作' },
+                ],
             },
             description: '按钮的样式风格，影响按钮的外观和语义',
-            defaultValue: 'default'
+            defaultValue: 'default',
         },
     ],
-
     events: [
         {
             name: 'onClick',
@@ -143,17 +142,16 @@ export const buttonMeta:IComponentMetadata = {
                 {
                     name: 'event',
                     type: 'MouseEvent',
-                    description: '点击事件对象'
-                }
-            ]
-        }
+                    description: '点击事件对象',
+                },
+            ],
+        },
     ],
     slots: [
         {
             name: 'default',
             description: '按钮的内容，可以是文本或其他元素',
-            required: true
-        }
+            required: true,
+        },
     ],
-}
-
+};

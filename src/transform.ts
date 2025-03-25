@@ -1,7 +1,7 @@
-import { IComponentMetadata } from './type';
-import fs from 'fs';
-import path from 'path';
-import * as  originComponents from './origin/component-meta';
+import type { IComponentMetadata } from './type';
+import fs from 'node:fs';
+import path from 'node:path';
+import * as originComponents from './origin/component-meta';
 
 export class SchemaTransformer {
     private transformProp(prop: any): any {
@@ -11,7 +11,7 @@ export class SchemaTransformer {
             propType: this.transformPropType(prop.propType),
             description: prop.description,
             defaultValue: prop.defaultValue,
-            required: prop.required
+            required: prop.required,
         };
     }
 
@@ -24,12 +24,12 @@ export class SchemaTransformer {
             case 'array':
                 return {
                     type: 'array',
-                    items: this.transformPropType(propType.items)
+                    items: this.transformPropType(propType.items),
                 };
             case 'function':
                 return {
                     type: 'function',
-                    signature: propType.signature
+                    signature: propType.signature,
                 };
             case 'oneOf':
                 if (!propType.options || !Array.isArray(propType.options)) {
@@ -40,8 +40,8 @@ export class SchemaTransformer {
                     items: propType.options.map((opt: any) => ({
                         name: opt.value,
                         title: opt.label,
-                        usage: opt.description
-                    }))
+                        usage: opt.description,
+                    })),
                 };
             case 'shape':
                 if (!propType.properties || !Array.isArray(propType.properties)) {
@@ -50,7 +50,7 @@ export class SchemaTransformer {
                 return {
                     type: 'shape',
                     value: propType.properties.map((p: any) => this.transformProp(p)),
-                    required: propType.required
+                    required: propType.required,
                 };
             default:
                 return propType;
@@ -67,23 +67,22 @@ export class SchemaTransformer {
             events: (source.events || []).map((e: any) => ({
                 name: e.name,
                 description: e.description,
-                parameters: e.params
+                parameters: e.params,
             })),
             slots: (source.slots || []).map((s: any) => ({
                 name: s.name,
                 description: s.desc,
-                scope: this.transformPropType(s.context)
-            }))
+                scope: this.transformPropType(s.context),
+            })),
         };
     }
 
     public transformDirectory(targetDir: string) {
         Object.values(originComponents).forEach((meta: any) => {
             const transformed = this.transform(meta);
-            const targetPath = path.join(targetDir, meta.componentName + '.json');
+            const targetPath = path.join(targetDir, `${meta.componentName}.json`);
             fs.mkdirSync(path.dirname(targetPath), { recursive: true });
             fs.writeFileSync(targetPath, JSON.stringify(transformed, null, 2));
-        })
+        });
     }
 }
-

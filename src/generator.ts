@@ -1,14 +1,14 @@
-import { IComponentMetadata, ItemDescription } from './type';
+import type { IComponentMetadata, ItemDescription } from './type';
 
 interface TrainingExample {
-    input: string;
-    output: string;
+    input: string
+    output: string
 }
 
 interface GeneratorOptions {
-    includeDescription?: boolean;
-    includeScenarios?: boolean;
-    includeParentInfo?: boolean;
+    includeDescription?: boolean
+    includeScenarios?: boolean
+    includeParentInfo?: boolean
 }
 
 export class SchemaDataGenerator {
@@ -18,11 +18,11 @@ export class SchemaDataGenerator {
 
     constructor(components: IComponentMetadata[]) {
         this.components = components;
-        this.schema = this.components[0]
+        this.schema = this.components[0];
     }
 
     private generatePropValue(prop: any, propName: string): any {
-        // 如果有默认值，优先使用默认值
+    // 如果有默认值，优先使用默认值
         if (prop.defaultValue !== undefined) {
             return prop.defaultValue;
         }
@@ -110,7 +110,8 @@ export class SchemaDataGenerator {
                     // 如果没有默认值但有推荐值，使用推荐值
                     if (!defaultValue && prop.propType.recommended) {
                         const recommended = prop.propType.value.find((v: any) => v.value === prop.propType.recommended);
-                        if (recommended) return recommended.value;
+                        if (recommended)
+                            return recommended.value;
                     }
                     return defaultValue ? defaultValue.value : prop.propType.value[0];
                 case 'oneOfType':
@@ -129,7 +130,7 @@ export class SchemaDataGenerator {
                     const arrayValue = this.generatePropValue({ propType: prop.propType.value }, propName);
                     // 如果有最小长度要求，生成足够的元素
                     if (prop.minLength && arrayValue) {
-                        return Array(prop.minLength).fill(arrayValue);
+                        return Array.from({ length: prop.minLength }).fill(arrayValue);
                     }
                     return [arrayValue];
                 case 'exact':
@@ -150,8 +151,8 @@ export class SchemaDataGenerator {
                         return prop.examples[0];
                     }
                     return {
-                        [this.generatePropValue({ propType: keyType }, 'key')]: 
-                        this.generatePropValue({ propType: valueType }, 'value')
+                        [this.generatePropValue({ propType: keyType }, 'key')]:
+                        this.generatePropValue({ propType: valueType }, 'value'),
                     };
                 default:
                     return null;
@@ -183,7 +184,8 @@ export class SchemaDataGenerator {
             .map(([key, value]) => {
                 if (typeof value === 'string') {
                     return `${key}="${value}"`;
-                } else if (typeof value === 'boolean' && value) {
+                }
+                else if (typeof value === 'boolean' && value) {
                     return key;
                 }
                 return `:${key}="${JSON.stringify(value)}"`;
@@ -193,8 +195,8 @@ export class SchemaDataGenerator {
 
     private generateComponentExample(propName?: string): string {
         const props = this.generatePropsExample(propName);
-        const childrenContent = props['children'] || '';
-        delete props['children'];
+        const childrenContent = props.children || '';
+        delete props.children;
         const formattedProps = this.formatProps(props);
         return `<${this.schema.componentName} ${formattedProps}>${childrenContent}</${this.schema.componentName}>`;
     }
@@ -213,7 +215,7 @@ export class SchemaDataGenerator {
 
         if (parent?.restrictions?.length) {
             desc += '\n使用限制：';
-            parent.restrictions.forEach(r => {
+            parent.restrictions.forEach((r) => {
                 desc += `\n- 在${r.parent}中：${r.description}`;
             });
         }
@@ -234,8 +236,7 @@ export class SchemaDataGenerator {
 
         const examples: TrainingExample[] = [];
 
-        this.components.forEach(schema => {
-            
+        this.components.forEach((schema) => {
             this.schema = schema;
 
             // 基本组件描述示例
@@ -287,7 +288,7 @@ export class SchemaDataGenerator {
                 });
 
                 // 为每种子组件生成示例
-                this.schema.children.forEach(child => {
+                this.schema.children.forEach((child) => {
                     examples.push({
                         input: `如何在${this.schema.title}组件(${this.schema.componentName})中使用${child}子组件？`,
                         output: `在${this.schema.title}组件(${this.schema.componentName})中使用${child}子组件的示例：\n${this.generateComponentExample()}`,
@@ -309,8 +310,6 @@ export class SchemaDataGenerator {
                     output: `${this.schema.title}组件(${this.schema.componentName})的${prop.name}属性${description}`,
                 });
 
-
-
                 // 属性必填示例
                 if (prop.required) {
                     examples.push({
@@ -322,13 +321,13 @@ export class SchemaDataGenerator {
                 // 可选值示例
                 if (typeof prop.propType === 'object' && prop.propType.type === 'oneOf' && prop.propType.items?.length) {
                     // 为每个可选值生成示例
-                    prop.propType.items.forEach(item => {
+                    prop.propType.items.forEach((item) => {
                         const itemProps = { [prop.name]: item.name };
                         const formattedItemProps = this.formatProps(itemProps);
                         const usageDescription = item.usage || `适用于${item.title}的场景`;
                         examples.push({
                             input: `${this.schema.title}组件(${this.schema.componentName})的${prop.name}属性设置为${item.name}是什么效果？`,
-                            output: `${this.schema.title}组件(${this.schema.componentName})的${prop.name}属性设置为${item.name}（${item.title}）时：\n- 使用场景：${usageDescription}\n<${this.schema.componentName} ${formattedItemProps}>${prop.title || this.schema.title}</${this.schema.componentName}>`
+                            output: `${this.schema.title}组件(${this.schema.componentName})的${prop.name}属性设置为${item.name}（${item.title}）时：\n- 使用场景：${usageDescription}\n<${this.schema.componentName} ${formattedItemProps}>${prop.title || this.schema.title}</${this.schema.componentName}>`,
                         });
                     });
 
@@ -336,12 +335,10 @@ export class SchemaDataGenerator {
                     if (prop.propType.items.length > 1) {
                         examples.push({
                             input: `${this.schema.title}组件(${this.schema.componentName})的${prop.name}属性在不同场景下如何选择？`,
-                            output: `${this.schema.title}组件(${this.schema.componentName})的${prop.name}属性使用建议：\n${prop.propType.items.map((item: ItemDescription) => `- ${item.name}（${item.title}）：${item.usage || `适用于${item.title}的场景`}`).join('\n')}`
+                            output: `${this.schema.title}组件(${this.schema.componentName})的${prop.name}属性使用建议：\n${prop.propType.items.map((item: ItemDescription) => `- ${item.name}（${item.title}）：${item.usage || `适用于${item.title}的场景`}`).join('\n')}`,
                         });
                     }
                 }
-
-
 
                 // 属性必填性示例
                 if (prop.required) {
@@ -354,7 +351,7 @@ export class SchemaDataGenerator {
 
             // 属性关联示例
             if (this.schema.propRelations?.length) {
-                this.schema.propRelations.forEach(relation => {
+                this.schema.propRelations.forEach((relation) => {
                     let output = relation.effect;
                     if (relation.notes?.length) {
                         output += '\n注意事项：';
@@ -364,29 +361,32 @@ export class SchemaDataGenerator {
                     }
                     examples.push({
                         input: `${this.schema.title}组件(${this.schema.componentName})的${relation.source}属性和${relation.target}属性有什么关系？`,
-                        output
+                        output,
                     });
                 });
             }
 
             // 事件处理示例
             if (this.schema.events?.length) {
-                this.schema.events.forEach(event => {
+                this.schema.events.forEach((event) => {
                     // 事件基础描述
                     examples.push({
                         input: `${this.schema.title}组件(${this.schema.componentName})的${event.name}事件是什么？`,
-                        output: `${event.description}\n` +
-                            (event.parameters?.length ?
-                                `事件参数：\n${event.parameters.map(p => `- ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}` : '')
+                        output: `${event.description}\n${
+                            event.parameters?.length
+                                ? `事件参数：\n${event.parameters.map(p => `- ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
+                                : ''}`,
                     });
 
                     // 事件使用示例
                     const exampleCode = `<script setup>
                 const handle${event.name} = (${event.parameters?.map(p => p.name).join(', ') || ''}) => {
                     // ${event.description}
-                    ${event.parameters?.length ? `
+                    ${event.parameters?.length
+                        ? `
                     // 事件参数:
-                    ${event.parameters.map(p => `// - ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}` : ''}
+                    ${event.parameters.map(p => `// - ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
+                        : ''}
                 }
                 </script>
 
@@ -397,13 +397,11 @@ export class SchemaDataGenerator {
                     examples.push({
                         input: `如何在${this.schema.title}组件(${this.schema.componentName})中处理${event.name}事件？`,
                         output: `处理${event.name}事件的示例代码：
-${exampleCode}`
+${exampleCode}`,
                     });
                 });
             }
-        })
-
-
+        });
 
         return examples;
     }
