@@ -18,7 +18,7 @@
     "build": "rslib build",
     "dev": "rslib build --watch",
     "transform": "node dist/transform-runner.js",
-    "generate": "node dist/transformByAI.js"
+    "generate": "node dist/generator-runner.js"
   },
   "dependencies": {
     "lodash-es": "^4.17.12",

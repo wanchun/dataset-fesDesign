@@ -114,7 +114,7 @@ export const alertMeta: IComponentMetadata = {
       "required": false
     },
     {
-      "name": "descriptionSlot",
+      "name": "description",
       "description": "自定义辅助消息内容，可以是文本或其他元素",
       "required": false
     },

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import schemaList from './components';
+import * as schemaList from './components';
 import { SchemaDataGenerator } from './generator';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,7 +14,7 @@ if (!fs.existsSync(outputDir)) {
 }
 
 // 生成训练数据
-const generator = new SchemaDataGenerator(schemaList);
+const generator = new SchemaDataGenerator(Object.values(schemaList));
 const trainingData = generator.generateTrainingData({
     includeDescription: true,
     includeScenarios: true,

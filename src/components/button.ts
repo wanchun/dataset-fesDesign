@@ -16,7 +16,10 @@ export const buttonMeta: IComponentMetadata = {
         '警告提示：使用warning类型按钮展示警告信息，提醒用户注意潜在风险。',
     ],
     parent: {
-        types: ['container', 'layout'],
+        types: [
+            'container',
+            'layout',
+        ],
         restrictions: [
             {
                 parent: 'FFormItem',
@@ -41,12 +44,6 @@ export const buttonMeta: IComponentMetadata = {
         },
     ],
     props: [
-        {
-            name: 'children',
-            title: '按钮内容',
-            propType: 'string',
-            description: '按钮的文本内容',
-        },
         {
             name: 'disabled',
             title: '禁用状态',
@@ -86,8 +83,16 @@ export const buttonMeta: IComponentMetadata = {
             propType: {
                 type: 'oneOf',
                 items: [
-                    { name: 'button', title: '普通按钮', usage: '常规按钮交互场景，点击时触发onClick事件' },
-                    { name: 'submit', title: '提交按钮', usage: '表单提交场景，点击时自动触发表单的submit事件' },
+                    {
+                        name: 'button',
+                        title: '普通按钮',
+                        usage: '常规按钮交互场景，点击时触发onClick事件',
+                    },
+                    {
+                        name: 'submit',
+                        title: '提交按钮',
+                        usage: '表单提交场景，点击时自动触发表单的submit事件',
+                    },
                 ],
             },
             description: '设置按钮的原生type属性，影响按钮的默认行为',
@@ -120,14 +125,46 @@ export const buttonMeta: IComponentMetadata = {
             propType: {
                 type: 'oneOf',
                 items: [
-                    { name: 'default', title: '默认', usage: '常规场景的默认按钮样式，适用于一般操作' },
-                    { name: 'primary', title: '主要', usage: '需要突出强调的主要操作按钮，如表单提交、确认等重要操作' },
-                    { name: 'text', title: '文本', usage: '轻量级的文本按钮，用于次要操作，保持界面清爽' },
-                    { name: 'link', title: '链接', usage: '链接形式的按钮，用于导航跳转或触发外部链接' },
-                    { name: 'info', title: '信息', usage: '用于展示信息的按钮样式，传达中性的信息状态' },
-                    { name: 'success', title: '成功', usage: '表示成功状态的按钮样式，用于操作成功的反馈' },
-                    { name: 'warning', title: '警告', usage: '表示警告状态的按钮样式，提醒用户需要注意' },
-                    { name: 'danger', title: '危险', usage: '表示危险操作的按钮样式，如删除等破坏性操作' },
+                    {
+                        name: 'default',
+                        title: '默认',
+                        usage: '常规场景的默认按钮样式，适用于一般操作',
+                    },
+                    {
+                        name: 'primary',
+                        title: '主要',
+                        usage: '需要突出强调的主要操作按钮，如表单提交、确认等重要操作',
+                    },
+                    {
+                        name: 'text',
+                        title: '文本',
+                        usage: '轻量级的文本按钮，用于次要操作，保持界面清爽',
+                    },
+                    {
+                        name: 'link',
+                        title: '链接',
+                        usage: '链接形式的按钮，用于导航跳转或触发外部链接',
+                    },
+                    {
+                        name: 'info',
+                        title: '信息',
+                        usage: '用于展示信息的按钮样式，传达中性的信息状态',
+                    },
+                    {
+                        name: 'success',
+                        title: '成功',
+                        usage: '表示成功状态的按钮样式，用于操作成功的反馈',
+                    },
+                    {
+                        name: 'warning',
+                        title: '警告',
+                        usage: '表示警告状态的按钮样式，提醒用户需要注意',
+                    },
+                    {
+                        name: 'danger',
+                        title: '危险',
+                        usage: '表示危险操作的按钮样式，如删除等破坏性操作',
+                    },
                 ],
             },
             description: '按钮的样式风格，影响按钮的外观和语义',
