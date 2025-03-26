@@ -7,10 +7,5 @@
 node_modules
 dist/
 output/
-tmp
 
-# IDE
-.vscode/*
-!.vscode/extensions.json
-.idea
-
+.env

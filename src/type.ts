@@ -25,7 +25,7 @@ export interface ItemDescription {
 /**
  * 基础类型
  */
-export type BasicPropType = 'string' | 'number' | 'bool' | 'func' | 'node' | 'object';
+export type BasicPropType = 'string' | 'number' | 'bool' | 'func' | 'node' | 'object' | 'array';
 
 /**
  * 枚举类型
@@ -188,6 +188,43 @@ export interface SlotType {
 
 }
 
+export interface exposeType {
+    /**
+     * 导出名称
+     * @example 'onClick', 'onChange'
+     */
+    name: string
+
+    /**
+     * 导出的描述信息
+     * @example '点击按钮时触发'
+     */
+    description?: string
+
+    /**
+     * 导出函数的参数列表
+     */
+    parameters?: Array<{
+        /**
+         * 参数名称
+         * @example 'event', 'value'
+         */
+        name: string
+
+        /**
+         * 参数类型
+         * @example 'MouseEvent', 'string'
+         */
+        type: string
+
+        /**
+         * 参数描述
+         * @example '事件对象', '当前值'
+         */
+        description?: string
+    }>
+}
+
 /**
  * 组件元数据接口定义
  * 用于描述组件的所有配置信息，包括基本信息、属性、事件、插槽等
@@ -274,4 +311,10 @@ export interface IComponentMetadata {
      * 用于描述组件支持的所有插槽
      */
     slots?: Array<SlotType>
+
+    /**
+     * 组件暴露的方法定义列表
+     * 用于描述组件暴露的所有方法
+     */
+    exposes?: Array<exposeType>
 }

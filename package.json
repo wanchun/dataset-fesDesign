@@ -18,17 +18,19 @@
     "build": "rslib build",
     "dev": "rslib build --watch",
     "transform": "node dist/transform-runner.js",
-    "generate": "node dist/generator-runner.js"
+    "generate": "node dist/transformByAI.js"
   },
   "dependencies": {
-    "lodash-es": "^4.17.12"
+    "lodash-es": "^4.17.12",
+    "minimist": "^1.2.8",
+    "openai": "^4.26.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.10.0",
     "@rslib/core": "^0.5.5",
     "@types/lodash-es": "^4.17.12",
+    "@types/minimist": "1.2.5",
     "@types/node": "^22.8.1",
-    "@webank/letgo-types": "1.4.1",
     "typescript": "^5.8.2"
   }
 }
