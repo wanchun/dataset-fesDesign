@@ -60,7 +60,7 @@ async function processComponents() {
     }
 
     // 添加并发控制
-    const concurrencyLimit = 1; // 并发数限制
+    const concurrencyLimit = 3; // 并发数限制
 
     // 使用排序后的文件列表创建处理批次
     const chunks = [];
@@ -79,15 +79,14 @@ async function processComponents() {
                 const camelCaseName = camelCase(componentName);
 
                 try {
-                    const metadata = await transformer.transform({ componentName, componentContent: content });
-
                     const index = docsFiles.findIndex(docsFile => lowerCase(docsFile).startsWith(lowerCase(componentName)));
+                    let docContent = '';
                     if (index !== -1) {
                         const docsFilePath = path.join(docsDir, docsFiles[index]);
-                        const docsContent = fs.readFileSync(docsFilePath, 'utf-8');
-                        const docsData = await transformer.parseDocs({ componentName, docContent: docsContent });
-                        metadata.templates = docsData;
+                        docContent = fs.readFileSync(docsFilePath, 'utf-8');
                     }
+
+                    const metadata = await transformer.transform({ componentName, componentContent: content, docContent: docContent });
 
                     const outputPath = path.join(outputDir, `${componentName}.ts`);
                     log('info', `正在保存转换结果到: ${outputPath}`);

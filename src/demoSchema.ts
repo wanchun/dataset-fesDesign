@@ -1,4 +1,4 @@
-import type { IComponentMetadata } from '../type';
+import type { IComponentMetadata } from './type';
 
 export const buttonMeta: IComponentMetadata = {
     title: '按钮',

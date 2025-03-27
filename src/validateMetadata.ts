@@ -32,6 +32,9 @@ export function validateMetadata(metadata: any, componentName: string): { valid:
 
     // 验证propRelations字段
     validatePropRelations(metadata, errors);
+    
+    // 验证templates字段
+    validateTemplates(metadata, errors);
 
     return {
         valid: errors.length === 0,
@@ -80,6 +83,10 @@ function validateProps(metadata: any, errors: string[]): void {
     for (let i = 0; i < metadata.props.length; i++) {
         const prop = metadata.props[i];
         // 检查必填字段
+        if (prop.example === undefined) {
+            errors.push(`props[${i}]缺少必填字段: example`);
+        }
+
         if (!prop.name) {
             errors.push(`props[${i}]缺少必填字段: name`);
         }
@@ -101,47 +108,47 @@ function validateProps(metadata: any, errors: string[]): void {
 /**
  * 验证propType字段
  */
-function validatePropType(propType: any, path: string, errors: string[]): void {
+function validatePropType(valueType: any, path: string, errors: string[]): void {
     // 如果是基础类型
-    if (typeof propType === 'string') {
+    if (typeof valueType === 'string') {
         const basicTypes = basicPropValueList;
-        if (!basicTypes.includes(propType)) {
+        if (!basicTypes.includes(valueType)) {
             errors.push(`${path}不是有效的基础类型，有效值为: ${basicTypes.join(', ')}`);
         }
         return;
     }
 
     // 如果是复杂类型
-    if (typeof propType !== 'object' || propType === null) {
+    if (typeof valueType !== 'object' || valueType === null) {
         errors.push(`${path}必须是字符串或对象`);
         return;
     }
 
     // 检查type字段
-    if (!propType.type) {
+    if (!valueType.type) {
         errors.push(`${path}缺少必填字段: type`);
         return;
     }
 
     // 根据不同类型进行验证
-    switch (propType.type) {
+    switch (valueType.type) {
         case 'oneOf':
-            validateOneOfType(propType, path, errors);
+            validateOneOfType(valueType, path, errors);
             break;
         case 'oneOfType':
-            validateOneOfTypeType(propType, path, errors);
+            validateOneOfTypeType(valueType, path, errors);
             break;
         case 'arrayOf':
-            validateArrayOfType(propType, path, errors);
+            validateArrayOfType(valueType, path, errors);
             break;
         case 'exact':
-            validateExactType(propType, path, errors);
+            validateExactType(valueType, path, errors);
             break;
         case 'shape':
-            validateShapeType(propType, path, errors);
+            validateShapeType(valueType, path, errors);
             break;
         case 'func':
-            validateFuncType(propType, path, errors);
+            validateFuncType(valueType, path, errors);
             break;
         default:
             errors.push(`${path}.type不是有效的类型，有效值为: oneOf, oneOfType, arrayOf, exact, shape, func`);
@@ -151,21 +158,21 @@ function validatePropType(propType: any, path: string, errors: string[]): void {
 /**
  * 验证oneOf类型
  */
-function validateOneOfType(propType: any, path: string, errors: string[]): void {
-    if (!propType.items) {
+function validateOneOfType(valueType: any, path: string, errors: string[]): void {
+    if (!valueType.items) {
         errors.push(`${path}缺少必填字段: items`);
         return;
     }
 
-    if (!Array.isArray(propType.items)) {
+    if (!Array.isArray(valueType.items)) {
         errors.push(`${path}.items必须是数组`);
         return;
     }
 
-    for (let i = 0; i < propType.items.length; i++) {
-        const item = propType.items[i];
-        if (!item.name) {
-            errors.push(`${path}.items[${i}]缺少必填字段: name`);
+    for (let i = 0; i < valueType.items.length; i++) {
+        const item = valueType.items[i];
+        if (item.value === undefined) {
+            errors.push(`${path}.items[${i}]缺少必填字段: value`);
         }
 
         if (!item.title) {
@@ -177,50 +184,50 @@ function validateOneOfType(propType: any, path: string, errors: string[]): void 
 /**
  * 验证oneOfType类型
  */
-function validateOneOfTypeType(propType: any, path: string, errors: string[]): void {
-    if (!propType.value) {
+function validateOneOfTypeType(valueType: any, path: string, errors: string[]): void {
+    if (!valueType.value) {
         errors.push(`${path}缺少必填字段: value`);
         return;
     }
 
-    if (!Array.isArray(propType.value)) {
+    if (!Array.isArray(valueType.value)) {
         errors.push(`${path}.value必须是数组`);
         return;
     }
 
-    for (let i = 0; i < propType.value.length; i++) {
-        validatePropType(propType.value[i], `${path}.value[${i}]`, errors);
+    for (let i = 0; i < valueType.value.length; i++) {
+        validatePropType(valueType.value[i], `${path}.value[${i}]`, errors);
     }
 }
 
 /**
  * 验证arrayOf类型
  */
-function validateArrayOfType(propType: any, path: string, errors: string[]): void {
-    if (!propType.value) {
+function validateArrayOfType(valueType: any, path: string, errors: string[]): void {
+    if (!valueType.value) {
         errors.push(`${path}缺少必填字段: value`);
         return;
     }
 
-    validatePropType(propType.value, `${path}.value`, errors);
+    validatePropType(valueType.value, `${path}.value`, errors);
 }
 
 /**
  * 验证exact类型
  */
-function validateExactType(propType: any, path: string, errors: string[]): void {
-    if (!propType.value) {
+function validateExactType(valueType: any, path: string, errors: string[]): void {
+    if (!valueType.value) {
         errors.push(`${path}缺少必填字段: value`);
         return;
     }
 
-    if (!Array.isArray(propType.value)) {
+    if (!Array.isArray(valueType.value)) {
         errors.push(`${path}.value必须是数组`);
         return;
     }
 
-    for (let i = 0; i < propType.value.length; i++) {
-        const prop = propType.value[i];
+    for (let i = 0; i < valueType.value.length; i++) {
+        const prop = valueType.value[i];
         if (!prop.name) {
             errors.push(`${path}.value[${i}]缺少必填字段: name`);
         }
@@ -230,10 +237,10 @@ function validateExactType(propType: any, path: string, errors: string[]): void 
         }
 
         if (!prop.valueType) {
-            errors.push(`${path}.value[${i}]缺少必填字段: propType`);
+            errors.push(`${path}.value[${i}]缺少必填字段: valueType`);
         }
         else {
-            validatePropType(prop.valueType, `${path}.value[${i}].propType`, errors);
+            validatePropType(prop.valueType, `${path}.value[${i}].valueType`, errors);
         }
     }
 }
@@ -241,19 +248,19 @@ function validateExactType(propType: any, path: string, errors: string[]): void 
 /**
  * 验证shape类型
  */
-function validateShapeType(propType: any, path: string, errors: string[]): void {
-    if (!propType.value) {
+function validateShapeType(valueType: any, path: string, errors: string[]): void {
+    if (!valueType.value) {
         errors.push(`${path}缺少必填字段: value`);
         return;
     }
 
-    if (!Array.isArray(propType.value)) {
+    if (!Array.isArray(valueType.value)) {
         errors.push(`${path}.value必须是数组`);
         return;
     }
 
-    for (let i = 0; i < propType.value.length; i++) {
-        const prop = propType.value[i];
+    for (let i = 0; i < valueType.value.length; i++) {
+        const prop = valueType.value[i];
         if (!prop.name) {
             errors.push(`${path}.value[${i}]缺少必填字段: name`);
         }
@@ -263,15 +270,15 @@ function validateShapeType(propType: any, path: string, errors: string[]): void 
         }
 
         if (!prop.valueType) {
-            errors.push(`${path}.value[${i}]缺少必填字段: propType`);
+            errors.push(`${path}.value[${i}]缺少必填字段: valueType`);
         }
         else {
-            validatePropType(prop.valueType, `${path}.value[${i}].propType`, errors);
+            validatePropType(prop.valueType, `${path}.value[${i}].valueType`, errors);
         }
     }
 
     // 验证required字段
-    if (propType.required && !Array.isArray(propType.required)) {
+    if (valueType.required && !Array.isArray(valueType.required)) {
         errors.push(`${path}.required必须是数组`);
     }
 }
@@ -451,16 +458,16 @@ function validateParent(metadata: any, errors: string[]): void {
 /**
  * 验证func类型
  */
-function validateFuncType(propType: any, path: string, errors: string[]): void {
+function validateFuncType(valueType: any, path: string, errors: string[]): void {
     // 验证parameters字段
-    if (propType.parameters) {
-        if (!Array.isArray(propType.parameters)) {
+    if (valueType.parameters) {
+        if (!Array.isArray(valueType.parameters)) {
             errors.push(`${path}.parameters必须是数组`);
             return;
         }
 
-        for (let i = 0; i < propType.parameters.length; i++) {
-            const param = propType.parameters[i];
+        for (let i = 0; i < valueType.parameters.length; i++) {
+            const param = valueType.parameters[i];
             if (!param.name) {
                 errors.push(`${path}.parameters[${i}]缺少必填字段: name`);
             }
@@ -472,8 +479,8 @@ function validateFuncType(propType: any, path: string, errors: string[]): void {
     }
 
     // 验证returnType字段
-    if (propType.returnType) {
-        validatePropType(propType.returnType, `${path}.returnType`, errors);
+    if (valueType.returnType) {
+        validatePropType(valueType.returnType, `${path}.returnType`, errors);
     }
 }
 
@@ -530,6 +537,35 @@ function validatePropRelations(metadata: any, errors: string[]): void {
                     }
                 }
             }
+        }
+    }
+}
+
+/**
+ * 验证templates字段
+ */
+function validateTemplates(metadata: any, errors: string[]): void {
+    if (!metadata.templates)
+        return;
+
+    if (!Array.isArray(metadata.templates)) {
+        errors.push('templates必须是数组');
+        return;
+    }
+
+    for (let i = 0; i < metadata.templates.length; i++) {
+        const template = metadata.templates[i];
+        // 检查必填字段
+        if (!template.input) {
+            errors.push(`templates[${i}]缺少必填字段: input`);
+        } else if (typeof template.input !== 'string') {
+            errors.push(`templates[${i}].input必须是字符串`);
+        }
+
+        if (!template.output) {
+            errors.push(`templates[${i}]缺少必填字段: output`);
+        } else if (typeof template.output !== 'string') {
+            errors.push(`templates[${i}].output必须是字符串`);
         }
     }
 }
