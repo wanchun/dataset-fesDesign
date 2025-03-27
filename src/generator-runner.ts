@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as schemaList from './components';
 import { SchemaDataGenerator } from './generator';
+import { log } from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,5 +35,5 @@ outputPath = path.join(outputDir, 'fes-design.json');
 jsonlContent = JSON.stringify(trainingData, null, 2);
 fs.writeFileSync(outputPath, jsonlContent, 'utf-8');
 
-console.log(`✨ 训练数据已生成到: ${outputPath}`);
-console.log(`📊 共生成 ${trainingData.length} 条训练数据`);
+log('info', `训练数据已生成到: ${outputPath}`);
+log('info', `共生成 ${trainingData.length} 条训练数据`);

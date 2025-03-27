@@ -1,5 +1,8 @@
 import process from 'node:process';
+import * as dotenv from 'dotenv';
 import minimist from 'minimist';
+
+dotenv.config(); // 加载.env文件
 
 export interface TransformOptions {
     mode: 'all' | 'incomplete'

@@ -2,12 +2,38 @@
  * 组件属性类型定义
  */
 
-export interface ItemDescription {
+/**
+ * 参数描述
+ */
+export interface IParameter {
+    /**
+     * 参数名称
+     * @example 'event', 'value'
+     */
+    name: string
+
+    /**
+     * 参数类型
+     * @example 'MouseEvent','string'
+     */
+    type: string
+
+    /**
+     * 参数描述
+     * @example '事件对象', '当前值'
+     */
+    description?: string
+}
+
+/**
+ * 选项描述
+ */
+export interface IPropOptionDescription {
     /**
      * 选项的值
      * @example 'primary'
      */
-    name: string
+    value: any
 
     /**
      * 选项的标题
@@ -25,66 +51,86 @@ export interface ItemDescription {
 /**
  * 基础类型
  */
-export type BasicPropType = 'string' | 'number' | 'bool' | 'func' | 'node' | 'object' | 'array';
+export type IBasicPropValueType = 'date' | 'string' | 'number' | 'bool' | 'node' | 'object' | 'array';
+
+export const basicPropValueList = ['date', 'string', 'number', 'bool', 'node', 'object', 'array'];
+
+export function isBasePropType(prop: IPropValueType): prop is IBasicPropValueType {
+    return basicPropValueList.includes(prop as IBasicPropValueType);
+}
 
 /**
  * 枚举类型
  */
-export interface OneOfPropType {
+export interface IOneOfPropValueType {
     type: 'oneOf'
     /**
      * 属性的可选项列表，用于下拉选择等场景
      */
-    items: Array<ItemDescription>
+    items: Array<IPropOptionDescription>
 }
 
 /**
  * 联合类型
  */
-export interface OneOfTypePropType {
+export interface IOneOfTypePropValueType {
     type: 'oneOfType'
-    value: PropTypeDefinition[]
+    value: IPropValueType[]
 }
 
 /**
  * 数组类型
  */
-export interface ArrayOfPropType {
+export interface IArrayOfPropValueType {
     type: 'arrayOf'
-    value: PropTypeDefinition
+    value: IPropValueType
 }
 
 /**
  * 精确对象类型
  * 用于描述具有固定属性结构的对象
  */
-export interface ExactPropType {
+export interface IExactPropValueType {
     type: 'exact'
-    value: Array<PropType>
+    value: Array<IPropType>
 }
 
 /**
  * 形状对象类型
  * 用于描述可选属性的对象结构
  */
-export interface ShapePropType {
+export interface IShapePropValueType {
     type: 'shape'
-    value: Array<PropType>
+    value: Array<IPropType>
     required?: string[]
+}
+
+export interface IFuncPropValueType {
+    type: 'func'
+    /**
+     * 事件的参数列表
+     */
+    parameters?: Array<IParameter>
+
+    /**
+     * 事件的返回类型
+     */
+    returnType?: IPropValueType
 }
 
 /**
  * 属性类型定义
  */
-export type PropTypeDefinition =
-  | BasicPropType
-  | OneOfPropType
-  | OneOfTypePropType
-  | ArrayOfPropType
-  | ExactPropType
-  | ShapePropType;
+export type IPropValueType =
+  | IBasicPropValueType
+  | IOneOfPropValueType
+  | IOneOfTypePropValueType
+  | IArrayOfPropValueType
+  | IExactPropValueType
+  | IShapePropValueType
+  | IFuncPropValueType;
 
-export interface PropType {
+export interface IPropType {
 
     /**
      * 属性名称
@@ -102,7 +148,7 @@ export interface PropType {
      * 属性的数据类型
      * @example 'string', 'number', 'boolean'
      */
-    propType: PropTypeDefinition
+    valueType: IPropValueType
 
     /**
      * 属性的详细描述
@@ -121,9 +167,14 @@ export interface PropType {
      * @default false
      */
     required?: boolean
+
+    /**
+     * 属性的示例值
+     */
+    example: any
 }
 
-export interface EventType {
+export interface IEventType {
     /**
      * 事件名称
      * @example 'onClick', 'onChange'
@@ -139,28 +190,10 @@ export interface EventType {
     /**
      * 事件的参数列表
      */
-    parameters?: Array<{
-        /**
-         * 参数名称
-         * @example 'event', 'value'
-         */
-        name: string
-
-        /**
-         * 参数类型
-         * @example 'MouseEvent', 'string'
-         */
-        type: string
-
-        /**
-         * 参数描述
-         * @example '事件对象', '当前值'
-         */
-        description?: string
-    }>
+    parameters?: Array<IParameter>
 }
 
-export interface SlotType {
+export interface ISlotType {
 
     /**
      * 插槽名称
@@ -188,7 +221,7 @@ export interface SlotType {
 
 }
 
-export interface exposeType {
+export interface IExposeType {
     /**
      * 导出名称
      * @example 'onClick', 'onChange'
@@ -285,12 +318,24 @@ export interface IComponentMetadata {
 
     /**
      * 组件属性间的联动关系描述
-     * @example [{ source: 'loading', target: 'disabled', effect: 'loading状态时禁用点击' }]
+     * @example [{ source: 'hidden', target: 'showZero', effect: '隐藏徽标时，showZero属性不会生效', notes: [ '当hidden为true时，showZero属性无效', '适用于需要动态隐藏徽标的场景' ] }]
      */
     propRelations?: Array<{
+        /**
+         * 触发联动的属性名称
+         */
         source: string
+        /**
+         * 受联动影响的属性名称
+         */
         target: string | string[]
+        /**
+         * 联动的效果描述
+         */
         effect: string
+        /**
+         * 其他相关信息
+         */
         notes?: string[]
     }>
 
@@ -298,23 +343,31 @@ export interface IComponentMetadata {
      * 组件属性定义列表
      * 用于描述组件支持的所有属性配置
      */
-    props: Array<PropType>
+    props: Array<IPropType>
 
     /**
      * 组件事件定义列表
      * 用于描述组件支持的所有事件
      */
-    events?: Array<EventType>
+    events?: Array<IEventType>
 
     /**
      * 组件插槽定义列表
      * 用于描述组件支持的所有插槽
      */
-    slots?: Array<SlotType>
+    slots?: Array<ISlotType>
 
     /**
      * 组件暴露的方法定义列表
      * 用于描述组件暴露的所有方法
      */
-    exposes?: Array<exposeType>
+    exposes?: Array<IExposeType>
+
+    /**
+     * 组件的模板示例列表
+     */
+    templates?: Array<{
+        input: string
+        output: string
+    }>
 }

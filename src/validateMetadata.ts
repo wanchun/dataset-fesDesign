@@ -1,3 +1,5 @@
+import { basicPropValueList } from './type';
+
 /**
  * 验证组件元数据是否符合IComponentMetadata接口定义
  * @param metadata 待验证的组件元数据
@@ -86,12 +88,12 @@ function validateProps(metadata: any, errors: string[]): void {
             errors.push(`props[${i}]缺少必填字段: title`);
         }
 
-        if (!prop.propType) {
-            errors.push(`props[${i}]缺少必填字段: propType`);
+        if (!prop.valueType) {
+            errors.push(`props[${i}]缺少必填字段: valueType`);
         }
         else {
             // 验证propType的格式
-            validatePropType(prop.propType, `props[${i}].propType`, errors);
+            validatePropType(prop.valueType, `props[${i}].valueType`, errors);
         }
     }
 }
@@ -102,7 +104,7 @@ function validateProps(metadata: any, errors: string[]): void {
 function validatePropType(propType: any, path: string, errors: string[]): void {
     // 如果是基础类型
     if (typeof propType === 'string') {
-        const basicTypes = ['string', 'number', 'bool', 'func', 'node', 'object', 'array'];
+        const basicTypes = basicPropValueList;
         if (!basicTypes.includes(propType)) {
             errors.push(`${path}不是有效的基础类型，有效值为: ${basicTypes.join(', ')}`);
         }
@@ -138,8 +140,11 @@ function validatePropType(propType: any, path: string, errors: string[]): void {
         case 'shape':
             validateShapeType(propType, path, errors);
             break;
+        case 'func':
+            validateFuncType(propType, path, errors);
+            break;
         default:
-            errors.push(`${path}.type不是有效的类型，有效值为: oneOf, oneOfType, arrayOf, exact, shape`);
+            errors.push(`${path}.type不是有效的类型，有效值为: oneOf, oneOfType, arrayOf, exact, shape, func`);
     }
 }
 
@@ -224,11 +229,11 @@ function validateExactType(propType: any, path: string, errors: string[]): void 
             errors.push(`${path}.value[${i}]缺少必填字段: title`);
         }
 
-        if (!prop.propType) {
+        if (!prop.valueType) {
             errors.push(`${path}.value[${i}]缺少必填字段: propType`);
         }
         else {
-            validatePropType(prop.propType, `${path}.value[${i}].propType`, errors);
+            validatePropType(prop.valueType, `${path}.value[${i}].propType`, errors);
         }
     }
 }
@@ -257,11 +262,11 @@ function validateShapeType(propType: any, path: string, errors: string[]): void 
             errors.push(`${path}.value[${i}]缺少必填字段: title`);
         }
 
-        if (!prop.propType) {
+        if (!prop.valueType) {
             errors.push(`${path}.value[${i}]缺少必填字段: propType`);
         }
         else {
-            validatePropType(prop.propType, `${path}.value[${i}].propType`, errors);
+            validatePropType(prop.valueType, `${path}.value[${i}].propType`, errors);
         }
     }
 
@@ -440,6 +445,35 @@ function validateParent(metadata: any, errors: string[]): void {
                 errors.push(`parent.restrictions[${i}]缺少必填字段: description`);
             }
         }
+    }
+}
+
+/**
+ * 验证func类型
+ */
+function validateFuncType(propType: any, path: string, errors: string[]): void {
+    // 验证parameters字段
+    if (propType.parameters) {
+        if (!Array.isArray(propType.parameters)) {
+            errors.push(`${path}.parameters必须是数组`);
+            return;
+        }
+
+        for (let i = 0; i < propType.parameters.length; i++) {
+            const param = propType.parameters[i];
+            if (!param.name) {
+                errors.push(`${path}.parameters[${i}]缺少必填字段: name`);
+            }
+
+            if (!param.type) {
+                errors.push(`${path}.parameters[${i}]缺少必填字段: type`);
+            }
+        }
+    }
+
+    // 验证returnType字段
+    if (propType.returnType) {
+        validatePropType(propType.returnType, `${path}.returnType`, errors);
     }
 }
 

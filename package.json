@@ -21,6 +21,8 @@
     "generate": "node dist/generator-runner.js"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "fast-glob": "^3.3.3",
     "lodash-es": "^4.17.12",
     "minimist": "^1.2.8",
     "openai": "^4.26.0"
