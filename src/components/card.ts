@@ -143,7 +143,7 @@ export const cardMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onClick',
+            name: 'click',
             description: '点击卡片时触发',
             parameters: [
                 {

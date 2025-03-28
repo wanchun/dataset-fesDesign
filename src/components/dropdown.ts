@@ -267,7 +267,7 @@ export const dropdownMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onClick',
+            name: 'click',
             description: '点击选项时触发',
             parameters: [
                 {
@@ -278,7 +278,7 @@ export const dropdownMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onVisibleChange',
+            name: 'visibleChange',
             description: '下拉菜单显示状态变化时触发',
             parameters: [
                 {
@@ -289,7 +289,7 @@ export const dropdownMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onScroll',
+            name: 'scroll',
             description: '下拉菜单滚动时触发',
             parameters: [
                 {

@@ -93,7 +93,7 @@ export const inputFileDraggerMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '文件选择发生变化时触发',
             parameters: [
                 {

@@ -302,6 +302,11 @@ function validateEvents(metadata: any, errors: string[]): void {
             errors.push(`events[${i}]缺少必填字段: name`);
         }
 
+        // name不应该以on开头
+        if (/^on[A-Z]/.test(event.name)) {
+            errors.push(`events[${i}]的name不应该以on开头`);
+        }
+
         // 验证parameters字段
         if (event.parameters) {
             if (!Array.isArray(event.parameters)) {

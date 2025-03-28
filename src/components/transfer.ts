@@ -172,7 +172,7 @@ export const transferMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '选中值变化时触发',
             parameters: [
                 {

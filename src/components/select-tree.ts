@@ -447,7 +447,7 @@ export const selectTreeMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '选中值变化时触发',
             parameters: [
                 {
@@ -458,7 +458,7 @@ export const selectTreeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onVisibleChange',
+            name: 'visibleChange',
             description: '下拉框显示状态变化时触发',
             parameters: [
                 {

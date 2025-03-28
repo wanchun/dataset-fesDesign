@@ -126,7 +126,7 @@ export const checkboxGroupMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '选项变化时触发',
             parameters: [
                 {

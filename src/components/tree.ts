@@ -391,7 +391,7 @@ export const treeMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onCheck',
+            name: 'check',
             description: '勾选节点时触发',
             parameters: [
                 {
@@ -402,7 +402,7 @@ export const treeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onExpand',
+            name: 'expand',
             description: '展开/折叠节点时触发',
             parameters: [
                 {
@@ -413,7 +413,7 @@ export const treeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onSelect',
+            name: 'select',
             description: '选中节点时触发',
             parameters: [
                 {
@@ -424,7 +424,7 @@ export const treeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDragstart',
+            name: 'dragstart',
             description: '开始拖拽时触发',
             parameters: [
                 {
@@ -435,7 +435,7 @@ export const treeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDragend',
+            name: 'dragend',
             description: '拖拽结束时触发',
             parameters: [
                 {
@@ -446,7 +446,7 @@ export const treeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDragenter',
+            name: 'dragenter',
             description: '拖拽进入节点时触发',
             parameters: [
                 {
@@ -457,7 +457,7 @@ export const treeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDragleave',
+            name: 'dragleave',
             description: '拖拽离开节点时触发',
             parameters: [
                 {
@@ -468,7 +468,7 @@ export const treeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDragover',
+            name: 'dragover',
             description: '在节点上拖拽时持续触发',
             parameters: [
                 {
@@ -479,7 +479,7 @@ export const treeMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDrop',
+            name: 'drop',
             description: '放置节点时触发',
             parameters: [
                 {

@@ -278,7 +278,7 @@ export const uploadMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '文件状态改变时触发',
             parameters: [
                 {
@@ -289,7 +289,7 @@ export const uploadMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onRemove',
+            name: 'remove',
             description: '文件被移除时触发',
             parameters: [
                 {
@@ -300,7 +300,7 @@ export const uploadMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onSuccess',
+            name: 'success',
             description: '文件上传成功时触发',
             parameters: [
                 {
@@ -311,7 +311,7 @@ export const uploadMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onError',
+            name: 'error',
             description: '文件上传失败时触发',
             parameters: [
                 {
@@ -322,7 +322,7 @@ export const uploadMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onExceed',
+            name: 'exceed',
             description: '文件超出限制时触发',
             parameters: [
                 {
@@ -333,7 +333,7 @@ export const uploadMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onProgress',
+            name: 'progress',
             description: '上传进度变化时触发',
             parameters: [
                 {

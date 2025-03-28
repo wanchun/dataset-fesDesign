@@ -278,7 +278,7 @@ export const drawerMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onUpdate:show',
+            name: 'update:show',
             description: '显示状态变化事件',
             parameters: [
                 {
@@ -289,7 +289,7 @@ export const drawerMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onOk',
+            name: 'ok',
             description: '确认按钮点击事件',
             parameters: [
                 {
@@ -300,7 +300,7 @@ export const drawerMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onCancel',
+            name: 'cancel',
             description: '取消按钮点击事件',
             parameters: [
                 {
@@ -311,7 +311,7 @@ export const drawerMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onAfterEnter',
+            name: 'afterEnter',
             description: '打开动画完成事件',
             parameters: [
                 {
@@ -322,7 +322,7 @@ export const drawerMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onAfterLeave',
+            name: 'afterLeave',
             description: '关闭动画完成事件',
             parameters: [
                 {

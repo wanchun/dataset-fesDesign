@@ -194,14 +194,14 @@ export const datePickerMeta: IComponentMetadata = {
             title: '最大日期',
             valueType: 'date',
             description: '可选择的最大日期，超过该日期的选项将被禁用',
-            example: 'new Date(\'2025-12-31\')',
+            example: new Date('2025-12-31'),
         },
         {
             name: 'minDate',
             title: '最小日期',
             valueType: 'date',
             description: '可选择的最小日期，早于该日期的选项将被禁用',
-            example: 'new Date(\'2020-01-01\')',
+            example: new Date('2020-01-01'),
         },
         {
             name: 'maxRange',

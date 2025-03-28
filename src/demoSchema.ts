@@ -80,7 +80,7 @@ export const buttonMeta: IComponentMetadata = {
             title: '日期示例',
             valueType: 'date',
             description: 'xxx',
-            example: new Date(),
+            example: new Date('2025-12-31'),
         },
         {
             name: 'nodeDemo',
@@ -246,7 +246,7 @@ export const buttonMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onClick',
+            name: 'click',
             description: '点击按钮时触发',
             parameters: [
                 {

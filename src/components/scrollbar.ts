@@ -215,7 +215,7 @@ export const scrollbarMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onScroll',
+            name: 'scroll',
             description: '滚动时触发的事件',
             parameters: [
                 {

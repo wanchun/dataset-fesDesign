@@ -1,12 +1,13 @@
-import type { IComponentMetadata, IPropOptionDescription, IPropType } from './type';
+import type { IComponentMetadata, IOneOfPropValueType, IPropOptionDescription, IPropType } from './type';
 import { cloneDeep, random } from 'lodash-es';
-import { isBasePropType } from './type';
+import { basicPropValueList, isBasePropType } from './type';
+
 import { log } from './utils';
 
 interface TrainingExample {
     input: string
     output: string
-    type?: 'train' | 'test' | 'valid'
+    type?: 'schema' | 'doc'
 }
 
 interface GeneratorOptions {
@@ -243,6 +244,11 @@ export class SchemaDataGenerator {
                 else if (typeof value === 'boolean' && value) {
                     return key;
                 }
+                else if (value instanceof Date) {
+                    // 生成符合 new Date() 的ISO格式
+                    const isoDate = value.toISOString();
+                    return `:${key}="new Date('${isoDate}')"`;
+                }
                 return `:${key}="${JSON.stringify(value)}"`;
             })
             .join(' ');
@@ -341,6 +347,8 @@ export class SchemaDataGenerator {
         } = options;
 
         this.components.forEach((schema) => {
+            log('info', `组件[${schema.title}]开始生成训练数据...`);
+
             this.schema = schema;
 
             // 基本组件描述示例
@@ -430,7 +438,7 @@ export class SchemaDataGenerator {
                         const usageDescription = item.usage || `适用于${item.title}的场景`;
                         this.examples.push({
                             input: `${this.getComponentCName()}的${prop.name}属性设置为${item.value}是什么效果？`,
-                            output: `${this.getComponentCName()}的${prop.name}属性设置为${item.value}（${item.title}）时：\n- 使用场景：${usageDescription}\n ${this.generateComponentExampleBase({ props: itemProps, childrenContent: prop.title || this.schema.title })} `,
+                            output: `${this.getComponentCName()}的${prop.name}属性设置为${item.value}（${item.title}）时：\n- 使用场景：${usageDescription}\n ${this.generateComponentExampleBase({ props: itemProps, childrenContent: (item.value + item.title) || prop.title || this.schema.title })} `,
                         });
                     });
 
@@ -441,14 +449,6 @@ export class SchemaDataGenerator {
                             output: `${this.getComponentCName()}的${prop.name}属性使用建议：\n${prop.valueType.items.map((item: IPropOptionDescription) => `- ${item.value}（${item.title}）：${item.usage || `适用于${item.title}的场景`}`).join('\n')}`,
                         });
                     }
-                }
-
-                // 属性必填性示例
-                if (prop.required) {
-                    this.examples.push({
-                        input: `${this.getComponentCName()}的${prop.name}属性是必填的吗？`,
-                        output: `是的，${this.getComponentCName()}的${prop.name}属性是必填的。`,
-                    });
                 }
             });
 
@@ -531,101 +531,121 @@ export class SchemaDataGenerator {
             }
 
             // 事件处理示例
-            if (this.schema.events?.length) {
-                this.schema.events.forEach((event) => {
-                    // 事件基础描述
-                    this.examples.push({
-                        input: `${this.getComponentCName()}的${event.name}事件是什么？`,
-                        output: `${event.description}\n${
-                            event.parameters?.length
-                                ? `事件参数：\n${event.parameters.map(p => `- ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
-                                : ''}`,
-                    });
-
-                    // 事件使用示例
-                    const exampleCode = `<script setup>
-                const handle${event.name} = (${event.parameters?.map(p => p.name).join(', ') || ''}) => {
-                    // ${event.description}
-                    ${event.parameters?.length
-                        ? `
-                    // 事件参数:
-                    ${event.parameters.map(p => `// - ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
-                        : ''}
-                }
-                </script>
-
-                <template>
-                    <${this.schema.componentName} @${event.name}="handle${event.name}" />
-                </template>`;
-
-                    this.examples.push({
-                        input: `如何在${this.getComponentCName()}中处理${event.name}事件？`,
-                        output: `处理${event.name}事件的示例代码：\n ${exampleCode}`,
-                    });
-                });
-            }
+            this.generateEventExamples();
 
             // 暴露方法处理示例
-            if (this.schema.exposes?.length) {
-                this.schema.exposes.forEach((expose) => {
-                    // 暴露方法基础描述
-                    this.examples.push({
-                        input: `${this.getComponentCName()}的${expose.name}方法是什么？`,
-                        output: `${expose.description}\n${
-                            expose.parameters?.length
-                                ? `方法参数：\n${expose.parameters.map(p => `- ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
-                                : ''}`,
-                    });
-
-                    // 暴露方法使用示例
-                    const exampleCode = `<script setup>
-                import { ref } from 'vue';
-                
-                // 创建组件引用
-                const ${this.schema.componentName.charAt(0).toLowerCase() + this.schema.componentName.slice(1)}Ref = ref(null);
-                
-                // 调用组件暴露的方法
-                const call${expose.name.charAt(0).toUpperCase() + expose.name.slice(1)} = () => {
-                    if (${this.schema.componentName.charAt(0).toLowerCase() + this.schema.componentName.slice(1)}Ref.value) {
-                        ${this.schema.componentName.charAt(0).toLowerCase() + this.schema.componentName.slice(1)}Ref.value.${expose.name}(${expose.parameters?.map(p => p.name).join(', ') || ''});
-                        // ${expose.description}
-                    }
-                };
-                </script>
-
-                <template>
-                    <${this.schema.componentName} ref="${this.schema.componentName.charAt(0).toLowerCase() + this.schema.componentName.slice(1)}Ref" />
-                    <button @click="call${expose.name.charAt(0).toUpperCase() + expose.name.slice(1)}">调用${expose.name}方法</button>
-                </template>`;
-
-                    this.examples.push({
-                        input: `如何调用${this.getComponentCName()}的${expose.name}方法？`,
-                        output: `调用${expose.name}方法的示例代码：
-${exampleCode}`,
-                    });
-                });
-            }
+            this.generateExposeExamples();
 
             // 添加错误样本示例
             this.generateErrorExamples();
 
             // 处理组件自带的模板示例
-            if (schema.templates?.length) {
-                schema.templates.forEach((template) => {
-                    this.examples.push({
-                        input: template.input,
-                        output: template.output,
-                    });
-                });
-            }
+            this.generateTemplateExamples();
         });
 
         return this.examples;
     }
 
     /**
+     * 生成事件处理示例
+     */
+    private generateEventExamples(): void {
+        if (this.schema.events?.length) {
+            this.schema.events.forEach((event) => {
+                // 事件基础描述
+                this.examples.push({
+                    input: `${this.getComponentCName()}的${event.name}事件是什么？`,
+                    output: `${event.description}\n${event.parameters?.length
+                        ? `事件参数：\n${event.parameters.map(p => `- ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
+                        : ''}`,
+                });
+
+                // 事件使用示例
+                const exampleCode = `<script setup>
+            const handle${event.name} = (${event.parameters?.map(p => p.name).join(', ') || ''}) => {
+                // ${event.description}
+                ${event.parameters?.length
+                    ? `
+                // 事件参数:
+                ${event.parameters.map(p => `// - ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
+                    : ''}
+            }
+            </script>
+
+            <template>
+                <${this.schema.componentName} @${event.name}="handle${event.name}" />
+            </template>`;
+
+                this.examples.push({
+                    input: `如何在${this.getComponentCName()}中处理${event.name}事件？`,
+                    output: `处理${event.name}事件的示例代码：\n ${exampleCode}`,
+                });
+            });
+        }
+    }
+
+    /**
+     * 生成暴露方法的示例
+     */
+    private generateExposeExamples(): void {
+        if (this.schema.exposes?.length) {
+            this.schema.exposes.forEach((expose) => {
+                // 暴露方法基础描述
+                this.examples.push({
+                    input: `${this.getComponentCName()}的${expose.name}方法是什么？`,
+                    output: `${expose.description}\n${expose.parameters?.length
+                        ? `方法参数：\n${expose.parameters.map(p => `- ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
+                        : ''}`,
+                });
+
+                // 暴露方法使用示例
+                const exampleCode = `<script setup>
+            import { ref } from 'vue';
+            
+            // 创建组件引用
+            const ${this.schema.componentName.charAt(0).toLowerCase() + this.schema.componentName.slice(1)}Ref = ref(null);
+            
+            // 调用组件暴露的方法
+            const call${expose.name.charAt(0).toUpperCase() + expose.name.slice(1)} = () => {
+                if (${this.schema.componentName.charAt(0).toLowerCase() + this.schema.componentName.slice(1)}Ref.value) {
+                    ${this.schema.componentName.charAt(0).toLowerCase() + this.schema.componentName.slice(1)}Ref.value.${expose.name}(${expose.parameters?.map(p => p.name).join(', ') || ''});
+                    // ${expose.description}
+                }
+            };
+            </script>
+
+            <template>
+                <${this.schema.componentName} ref="${this.schema.componentName.charAt(0).toLowerCase() + this.schema.componentName.slice(1)}Ref" />
+                <button @click="call${expose.name.charAt(0).toUpperCase() + expose.name.slice(1)}">调用${expose.name}方法</button>
+            </template>`;
+
+                this.examples.push({
+                    input: `如何调用${this.getComponentCName()}的${expose.name}方法？`,
+                    output: `调用${expose.name}方法的示例代码：
+${exampleCode}`,
+                });
+            });
+        }
+    }
+
+    /**
+     * 组件自带的模板示例
+     */
+    private generateTemplateExamples(): void {
+        // 处理组件自带的模板示例
+        if (this.schema.templates?.length) {
+            this.schema.templates.forEach((template) => {
+                this.examples.push({
+                    input: template.input,
+                    output: template.output,
+                    type: 'doc',
+                });
+            });
+        }
+    }
+
+    /**
      * 生成错误样本示例
-     * @param examples 训练示例数组
      */
     private generateErrorExamples(): void {
         // 1. 传入了错误的组件属性值（类型）
@@ -646,39 +666,44 @@ ${exampleCode}`,
      */
     private generateTypeErrorExamples(): void {
         // 选择一些基础类型的属性来生成错误示例
-        const typeableProps = this.schema.props.filter(prop =>
-            typeof prop.valueType === 'string'
-            && ['string', 'number', 'bool', 'array', 'object'].includes(prop.valueType),
-        );
+        const typeableProps = this.schema.props.filter(prop => typeof prop.valueType === 'string' && basicPropValueList.includes(prop.valueType));
 
         if (typeableProps.length === 0)
             return;
 
         // 为每个属性生成一个类型错误示例
         typeableProps.forEach((prop) => {
-            let wrongValue: string;
+            let wrongValue: any;
             let correctType: string;
 
             switch (prop.valueType) {
                 case 'string':
-                    wrongValue = '123'; // 应该用引号包裹
+                    wrongValue = 123;
                     correctType = '字符串';
                     break;
                 case 'number':
-                    wrongValue = '"100"'; // 不应该有引号
+                    wrongValue = '100';
                     correctType = '数字';
                     break;
                 case 'bool':
-                    wrongValue = '"true"'; // 不应该有引号
+                    wrongValue = 'true';
                     correctType = '布尔值';
                     break;
                 case 'array':
-                    wrongValue = '{ item: "value" }'; // 应该是数组
+                    wrongValue = { item: 'value' };
                     correctType = '数组';
                     break;
                 case 'object':
-                    wrongValue = '[1, 2, 3]'; // 应该是对象
+                    wrongValue = [1, 2, 3];
                     correctType = '对象';
+                    break;
+                case 'date':
+                    wrongValue = '2023-01-01';
+                    correctType = '日期';
+                    break;
+                case 'node':
+                    wrongValue = '文本内容';
+                    correctType = '节点';
                     break;
                 default:
                     return; // 跳过不支持的类型
@@ -708,29 +733,30 @@ ${exampleCode}`,
             return;
 
         // 为每个有选项的属性生成错误示例
-        propsWithOptions.slice(0, 2).forEach((prop) => {
-            // 确保 propType 是对象类型且包含 items 属性
-            const items = typeof prop.valueType === 'object' && 'items' in prop.valueType
-                ? prop.valueType.items as IPropOptionDescription[]
-                : [];
-            if (!items || items.length < 2)
+        propsWithOptions.forEach((prop) => {
+            const items = (prop.valueType as IOneOfPropValueType).items;
+
+            // 找出所有有使用场景描述的选项
+            const itemsWithUsage = items.filter(item => item.usage);
+
+            if (itemsWithUsage.length < 2)
                 return;
 
-            // 找出一个有使用场景描述的选项
-            const itemWithUsage = items.find(item => item.usage);
-            if (!itemWithUsage)
-                return;
+            // 对所有场景进行处理
+            itemsWithUsage.forEach((item) => {
+                const itemWithUsage = item;
 
-            // 找出另一个不同的选项
-            const otherItem = items.find(item => item.value !== itemWithUsage.value);
-            if (!otherItem)
-                return;
+                // 找出另一个不同的选项
+                const otherItem = items.find(item => item.value !== itemWithUsage.value);
+                if (!otherItem)
+                    return;
 
-            const wrongExample = this.generateComponentExampleBase({ props: { [prop.name]: otherItem.value } });
+                const wrongExample = this.generateComponentExampleBase({ props: { [prop.name]: otherItem.value } });
 
-            this.examples.push({
-                input: `在${itemWithUsage.usage}的场景下，这段代码有什么问题？\n${wrongExample}`,
-                output: `这段代码中，${this.getComponentCName()}的${prop.name}属性设置为了"${otherItem.value}"，但在${itemWithUsage.usage}的场景下，应该使用"${itemWithUsage.value}"。\n\n"${otherItem.value}"(${otherItem.title})不适合这个场景，而"${itemWithUsage.value}"(${itemWithUsage.title})更适合，因为${itemWithUsage.usage}。\n\n正确的用法应该是：\n ${this.generateComponentExampleBase({ props: { [prop.name]: itemWithUsage.value } })}`,
+                this.examples.push({
+                    input: `在${itemWithUsage.usage}的场景下，这段代码有什么问题？\n${wrongExample}`,
+                    output: `这段代码中，${this.getComponentCName()}的${prop.name}属性设置为了"${otherItem.value}"，但在${itemWithUsage.usage}的场景下，应该使用"${itemWithUsage.value}"。\n\n"${otherItem.value}"(${otherItem.title})不适合这个场景，而"${itemWithUsage.value}"(${itemWithUsage.title})更适合，因为${itemWithUsage.usage}。\n\n正确的用法应该是：\n ${this.generateComponentExampleBase({ props: { [prop.name]: itemWithUsage.value } })}`,
+                });
             });
         });
     }
@@ -764,10 +790,9 @@ const handle${fakeMethod.charAt(0).toUpperCase() + fakeMethod.slice(1)} = () => 
 
             this.examples.push({
                 input: `这段代码有什么问题？\n${errorExample}`,
-                output: `这段代码中，尝试调用${this.getComponentCName()}的${fakeMethod}方法，但该方法不存在。\n\n${this.schema.componentName}组件没有提供${fakeMethod}方法。${
-                    existingMethods.length > 0
-                        ? `\n\n${this.schema.componentName}组件提供的方法有：\n${existingMethods.map(m => `- ${m}`).join('\n')}`
-                        : `\n\n${this.schema.componentName}组件没有提供任何可调用的方法。`
+                output: `这段代码中，尝试调用${this.getComponentCName()}的${fakeMethod}方法，但该方法不存在。\n\n${this.schema.componentName}组件没有提供${fakeMethod}方法。${existingMethods.length > 0
+                    ? `\n\n${this.schema.componentName}组件提供的方法有：\n${existingMethods.map(m => `- ${m}`).join('\n')}`
+                    : `\n\n${this.schema.componentName}组件没有提供任何可调用的方法。`
                 }`,
             });
         });
@@ -808,14 +833,12 @@ onMounted(() => {
 
             this.examples.push({
                 input: `这段代码有什么问题？\n${errorExample}`,
-                output: `这段代码中，尝试访问${this.getComponentCName()}实例的${fakeProp}属性或方法，但该属性或方法不存在。\n\n${this.schema.componentName}组件实例没有提供${fakeProp}属性或方法。${
-                    existingMethods.length > 0
-                        ? `\n\n${this.schema.componentName}组件提供的方法有：\n${existingMethods.map(m => `- ${m}`).join('\n')}`
-                        : ''
-                }${
-                    existingProps.length > 0
-                        ? `\n\n${this.schema.componentName}组件的属性有：\n${existingProps.slice(0, 5).map(p => `- ${p}`).join('\n')}${existingProps.length > 5 ? '\n- ...' : ''}`
-                        : ''
+                output: `这段代码中，尝试访问${this.getComponentCName()}实例的${fakeProp}属性或方法，但该属性或方法不存在。\n\n${this.schema.componentName}组件实例没有提供${fakeProp}属性或方法。${existingMethods.length > 0
+                    ? `\n\n${this.schema.componentName}组件提供的方法有：\n${existingMethods.map(m => `- ${m}`).join('\n')}`
+                    : ''
+                }${existingProps.length > 0
+                    ? `\n\n${this.schema.componentName}组件的属性有：\n${existingProps.slice(0, 5).map(p => `- ${p}`).join('\n')}${existingProps.length > 5 ? '\n- ...' : ''}`
+                    : ''
                 }`,
             });
         });

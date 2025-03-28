@@ -143,7 +143,7 @@ export const linkMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onClick',
+            name: 'click',
             description: '点击链接时触发',
             parameters: [
                 {

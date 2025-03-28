@@ -287,7 +287,7 @@ export const selectMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '选中值变化时触发',
             parameters: [
                 {
@@ -298,7 +298,7 @@ export const selectMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onSearch',
+            name: 'search',
             description: '搜索关键词变化时触发',
             parameters: [
                 {
@@ -309,7 +309,7 @@ export const selectMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onVisibleChange',
+            name: 'visibleChange',
             description: '下拉框显示状态变化时触发',
             parameters: [
                 {
@@ -320,7 +320,7 @@ export const selectMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onRemoveTag',
+            name: 'removeTag',
             description: '移除标签时触发',
             parameters: [
                 {
@@ -331,12 +331,12 @@ export const selectMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onClear',
+            name: 'clear',
             description: '点击清除按钮时触发',
             parameters: [],
         },
         {
-            name: 'onFocus',
+            name: 'focus',
             description: '获得焦点时触发',
             parameters: [
                 {
@@ -347,7 +347,7 @@ export const selectMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onBlur',
+            name: 'blur',
             description: '失去焦点时触发',
             parameters: [
                 {
@@ -358,7 +358,7 @@ export const selectMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onScroll',
+            name: 'scroll',
             description: '滚动时触发',
             parameters: [
                 {

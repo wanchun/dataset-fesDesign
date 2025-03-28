@@ -87,6 +87,7 @@ export class AITransformer {
    - 对于事件和方法参数，确保类型描述准确且有实际意义
    - 代码示例需包含必要的上下文（如vue的setup语法）
    - 错误示例必须具有典型性和教育意义，避免出现无效错误（如拼写错误等非逻辑错误）
+   - 事件名称不应该以on开头, onChange -> change, tsx格式才使用onChange
    
 
 IComponentMetadata接口定义：

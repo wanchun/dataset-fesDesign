@@ -223,7 +223,7 @@ export const radioGroupMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '选项变化时触发',
             parameters: [
                 {

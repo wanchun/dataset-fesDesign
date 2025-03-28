@@ -327,7 +327,7 @@ export const tableMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onCellClick',
+            name: 'cellClick',
             description: '单元格点击事件',
             parameters: [
                 {
@@ -338,7 +338,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onExpandChange',
+            name: 'expandChange',
             description: '行展开状态变化事件',
             parameters: [
                 {
@@ -349,7 +349,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onHeaderClick',
+            name: 'headerClick',
             description: '表头点击事件',
             parameters: [
                 {
@@ -360,7 +360,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onRowClick',
+            name: 'rowClick',
             description: '行点击事件',
             parameters: [
                 {
@@ -371,7 +371,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onSelect',
+            name: 'select',
             description: '行选择事件',
             parameters: [
                 {
@@ -382,7 +382,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onSelectAll',
+            name: 'selectAll',
             description: '全选事件',
             parameters: [
                 {
@@ -393,7 +393,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onSelectionChange',
+            name: 'selectionChange',
             description: '选择项变化事件',
             parameters: [
                 {
@@ -404,7 +404,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDragstart',
+            name: 'dragstart',
             description: '拖拽开始事件',
             parameters: [
                 {
@@ -425,7 +425,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDragend',
+            name: 'dragend',
             description: '拖拽结束事件',
             parameters: [
                 {
@@ -446,7 +446,7 @@ export const tableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onSortChange',
+            name: 'sortChange',
             description: '排序变化事件',
             parameters: [
                 {

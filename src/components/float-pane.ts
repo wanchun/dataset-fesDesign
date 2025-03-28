@@ -186,7 +186,7 @@ export const floatPaneMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onUpdate:show',
+            name: 'update:show',
             description: '显示状态变化时触发',
             parameters: [
                 {
@@ -197,7 +197,7 @@ export const floatPaneMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onAfterEnter',
+            name: 'afterEnter',
             description: '面板完全显示后触发',
             parameters: [
                 {
@@ -208,7 +208,7 @@ export const floatPaneMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onAfterLeave',
+            name: 'afterLeave',
             description: '面板完全隐藏后触发',
             parameters: [
                 {

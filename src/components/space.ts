@@ -203,7 +203,7 @@ export const spaceMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onClick',
+            name: 'click',
             description: '点击间距容器时触发',
             parameters: [
                 {

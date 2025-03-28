@@ -277,7 +277,7 @@ export const modalMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onUpdate:show',
+            name: 'update:show',
             description: '显示状态变化时触发',
             parameters: [
                 {
@@ -288,7 +288,7 @@ export const modalMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onOk',
+            name: 'ok',
             description: '点击确认按钮时触发',
             parameters: [
                 {
@@ -299,7 +299,7 @@ export const modalMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onCancel',
+            name: 'cancel',
             description: '点击取消按钮或关闭按钮时触发',
             parameters: [
                 {
@@ -310,7 +310,7 @@ export const modalMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onAfterEnter',
+            name: 'afterEnter',
             description: '模态框完全显示后触发',
             parameters: [
                 {
@@ -321,7 +321,7 @@ export const modalMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onAfterLeave',
+            name: 'afterLeave',
             description: '模态框完全关闭后触发',
             parameters: [
                 {

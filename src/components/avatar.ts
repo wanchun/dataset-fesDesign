@@ -169,7 +169,7 @@ export const avatarMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onError',
+            name: 'error',
             description: '当src指定的图片加载失败时触发',
             parameters: [],
         },

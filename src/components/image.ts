@@ -202,7 +202,7 @@ export const imageMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onLoad',
+            name: 'load',
             description: '图片加载成功时触发',
             parameters: [
                 {
@@ -213,7 +213,7 @@ export const imageMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onError',
+            name: 'error',
             description: '图片加载失败时触发',
             parameters: [
                 {

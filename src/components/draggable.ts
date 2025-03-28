@@ -91,7 +91,7 @@ export const draggableMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onDragstart',
+            name: 'dragstart',
             description: '拖拽开始时触发',
             parameters: [
                 {
@@ -112,7 +112,7 @@ export const draggableMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onDragend',
+            name: 'dragend',
             description: '拖拽结束时触发',
             parameters: [
                 {

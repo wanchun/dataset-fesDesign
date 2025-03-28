@@ -77,7 +77,7 @@ export const radioMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '当选中状态变化时触发',
             parameters: [
                 {

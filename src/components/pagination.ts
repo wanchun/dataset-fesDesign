@@ -135,7 +135,7 @@ export const paginationMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '当前页码或每页条数变化时触发',
             parameters: [
                 {
@@ -151,7 +151,7 @@ export const paginationMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onPageSizeChange',
+            name: 'pageSizeChange',
             description: '每页条数变化时触发',
             parameters: [
                 {

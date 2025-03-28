@@ -155,7 +155,7 @@ export const tagMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onClick',
+            name: 'click',
             description: '点击标签时触发',
             parameters: [
                 {
@@ -166,7 +166,7 @@ export const tagMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onClose',
+            name: 'close',
             description: '关闭标签时触发',
             parameters: [
                 {

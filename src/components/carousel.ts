@@ -244,7 +244,7 @@ export const carouselMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '轮播项切换时触发',
             parameters: [
                 {

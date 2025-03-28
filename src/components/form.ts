@@ -224,7 +224,7 @@ export const formMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onSubmit',
+            name: 'submit',
             description: '表单提交事件',
             parameters: [
                 {

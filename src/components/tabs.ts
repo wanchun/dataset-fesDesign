@@ -243,7 +243,7 @@ export const tabsMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onClose',
+            name: 'close',
             description: '关闭标签页时触发',
             parameters: [
                 {
@@ -254,7 +254,7 @@ export const tabsMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onChange',
+            name: 'change',
             description: '切换标签页时触发',
             parameters: [
                 {
@@ -265,7 +265,7 @@ export const tabsMeta: IComponentMetadata = {
             ],
         },
         {
-            name: 'onClickTab',
+            name: 'clickTab',
             description: '点击标签页时触发',
             parameters: [
                 {

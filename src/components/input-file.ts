@@ -119,7 +119,7 @@ export const inputFileMeta: IComponentMetadata = {
     ],
     events: [
         {
-            name: 'onChange',
+            name: 'change',
             description: '文件选择变化时触发',
             parameters: [
                 {
