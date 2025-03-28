@@ -77,9 +77,9 @@ import { log } from './utils';
         fs.writeFileSync(outputPath, jsonlContent, 'utf-8');
     };
 
-    writeJsonlFile(schemaData, 'fes-design_train.jsonl');
-    writeJsonlFile(testData, 'fes-design_test.jsonl');
-    writeJsonlFile(validData, 'fes-design_valid.jsonl');
+    writeJsonlFile(schemaData, 'train.jsonl');
+    writeJsonlFile(testData, 'test.jsonl');
+    writeJsonlFile(validData, 'valid.jsonl');
 
     log('info', `共生成 ${trainingData.length} 条训练数据`);
 })();
