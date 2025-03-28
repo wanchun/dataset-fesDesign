@@ -50,13 +50,21 @@ import { log } from './utils';
     if (schemaData.length < targetSchemaCount) {
         // 如果schemaData不足80%，从docData中移动数据
         const needMove = targetSchemaCount - schemaData.length;
-        const moveData = docData.splice(0, needMove);
+        const moveData = [];
+        for (let i = 0; i < needMove; i++) {
+            const randomIndex = Math.floor(Math.random() * docData.length);
+            moveData.push(...docData.splice(randomIndex, 1));
+        }
         schemaData = [...schemaData, ...moveData];
     }
     else if (schemaData.length > targetSchemaCount) {
         // 如果schemaData超过80%，移动数据到docData
         const needMove = schemaData.length - targetSchemaCount;
-        const moveData = schemaData.splice(0, needMove);
+        const moveData = [];
+        for (let i = 0; i < needMove; i++) {
+            const randomIndex = Math.floor(Math.random() * schemaData.length);
+            moveData.push(...schemaData.splice(randomIndex, 1));
+        }
         docData = [...docData, ...moveData];
     }
 
