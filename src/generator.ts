@@ -1,8 +1,7 @@
 import type { IComponentMetadata, IOneOfPropValueType, IPropOptionDescription, IPropType } from './type';
 import { cloneDeep, random } from 'lodash-es';
 import { basicPropValueList, isBasePropType } from './type';
-
-import { log } from './utils';
+import { log, toArray } from './utils';
 
 interface TrainingExample {
     input: string
@@ -42,8 +41,8 @@ export class SchemaDataGenerator {
         // 获取函数参数
         let parameters = '';
         if (typeof prop.valueType === 'object'
-          && prop.valueType.type === 'func'
-          && prop.valueType.parameters?.length) {
+            && prop.valueType.type === 'func'
+            && prop.valueType.parameters?.length) {
             parameters = prop.valueType.parameters
                 .map(param => param.name)
                 .join(', ');
@@ -54,8 +53,8 @@ export class SchemaDataGenerator {
 
         // 如果有返回类型，添加返回语句
         if (typeof prop.valueType === 'object'
-          && prop.valueType.type === 'func'
-          && prop.valueType.returnType) {
+            && prop.valueType.type === 'func'
+            && prop.valueType.returnType) {
             let returnValue = 'null';
             if (typeof prop.valueType.returnType === 'string') {
                 switch (prop.valueType.returnType) {
@@ -285,14 +284,15 @@ export class SchemaDataGenerator {
      * @param propName 指定的属性名称，如果提供则只生成该属性的值
      * @returns 属性值对象
      */
-    private generatePropsData(propName?: string): Record<string, any> {
+    private generatePropsData(propName?: string | string[]): Record<string, any> {
+        const propNameArray = toArray(propName);
         return this.schema.props.filter((prop) => {
             // children 属性其实是默认插槽
             if (prop.name === 'children') {
                 return false;
             }
             // 如果指定了propName且当前prop不匹配，跳过处理
-            if (propName && prop.name !== propName) {
+            if (propNameArray.length > 0 && !propNameArray.includes(prop.name)) {
                 return false;
             }
             return true;
@@ -409,48 +409,7 @@ export class SchemaDataGenerator {
             }
 
             // 属性使用示例
-            this.schema.props.forEach((prop) => {
-                // 合并属性描述和设置示例
-                let description = `${prop.description}\n`;
-                if (typeof prop.valueType === 'object' && prop.valueType.type === 'oneOf' && prop.valueType.items?.length) {
-                    description += `可选值：\n${prop.valueType.items.map(item => `- ${item.value}：${item.title}`).join('\n')}\n`;
-                }
-                description += `\n示例：\n${this.generateComponentExample({ propName: prop.name })}`;
-
-                this.examples.push({
-                    input: `${this.getComponentCName()}的${prop.name}属性是什么，如何使用？`,
-                    output: `${this.getComponentCName()}的${prop.name}属性${description}`,
-                });
-
-                // 属性必填示例
-                if (prop.required) {
-                    this.examples.push({
-                        input: `${this.getComponentCName()}的${prop.name}属性是必填的吗？`,
-                        output: `是的，${this.getComponentCName()}的${prop.name}属性是必填的。`,
-                    });
-                }
-
-                // 可选值示例
-                if (typeof prop.valueType === 'object' && prop.valueType.type === 'oneOf' && prop.valueType.items?.length) {
-                    // 为每个可选值生成示例
-                    prop.valueType.items.forEach((item) => {
-                        const itemProps = { [prop.name]: item.value };
-                        const usageDescription = item.usage || `适用于${item.title}的场景`;
-                        this.examples.push({
-                            input: `${this.getComponentCName()}的${prop.name}属性设置为${item.value}是什么效果？`,
-                            output: `${this.getComponentCName()}的${prop.name}属性设置为${item.value}（${item.title}）时：\n- 使用场景：${usageDescription}\n ${this.generateComponentExampleBase({ props: itemProps, childrenContent: (item.value + item.title) || prop.title || this.schema.title })} `,
-                        });
-                    });
-
-                    // 生成最佳实践建议
-                    if (prop.valueType.items.length > 1) {
-                        this.examples.push({
-                            input: `${this.getComponentCName()}的${prop.name}属性在不同场景下如何选择？`,
-                            output: `${this.getComponentCName()}的${prop.name}属性使用建议：\n${prop.valueType.items.map((item: IPropOptionDescription) => `- ${item.value}（${item.title}）：${item.usage || `适用于${item.title}的场景`}`).join('\n')}`,
-                        });
-                    }
-                }
-            });
+            this.generatePropExamples()
 
             // 属性关联示例
             if (this.schema.propRelations?.length) {
@@ -546,6 +505,154 @@ export class SchemaDataGenerator {
         return this.examples;
     }
 
+    private generateMuiPropsExample(props: IPropType[]): void {
+        // 生成多个属性的示例
+        const componentTemplate = this.generateComponentExampleBase({ props: this.generatePropsData(props.map(prop => prop.name)) })
+
+        // 生成属性组合的使用场景描述
+        const scenarioDescription = props.map(prop => {
+            let desc = `${prop.title}：${prop.description || ''}`;
+            if (typeof prop.valueType === 'object' && prop.valueType.type === 'oneOf' && prop.valueType.items?.length) {
+                const selectedValue = prop.valueType.items.find(item => item.value === this.generatePropValue(prop, prop.name));
+                if (selectedValue) {
+                    desc += `\n- 当前值：${selectedValue.value}（${selectedValue.title}）`;
+                    if (selectedValue.usage) {
+                        desc += `\n- 使用场景：${selectedValue.usage}`;
+                    }
+                }
+            }
+            return desc;
+        }).join('\n');
+
+        // 检查属性间的联动关系
+        const relatedProps = this.schema.propRelations?.filter(relation =>
+            props.some(prop => prop.name === relation.source) &&
+            (typeof relation.target === 'string' ?
+                props.some(prop => prop.name === relation.target) :
+                relation.target.some(target => props.some(prop => prop.name === target)))
+        ) || [];
+
+        // 生成联动关系描述
+        const relationDescription = relatedProps.length > 0 ?
+            `\n\n属性联动说明：\n${relatedProps.map(relation => {
+                const targetDesc = typeof relation.target === 'string' ?
+                    relation.target :
+                    relation.target.join('、');
+                return `- ${relation.source}与${targetDesc}：${relation.effect}`;
+            }).join('\n')}` : '';
+
+        // 生成属性组合的最佳实践建议
+        const bestPractices = props
+            .filter(prop => typeof prop.valueType === 'object' && prop.valueType.type === 'oneOf')
+            .map(prop => {
+                if (typeof prop.valueType === 'object' && prop.valueType.type === 'oneOf' && prop.valueType.items?.length) {
+                    return `${prop.title}：根据不同场景选择合适的值\n${prop.valueType.items
+                        .map(item => `  - ${item.value}（${item.title}）：${item.usage || `适用于${item.title}的场景`}`)
+                        .join('\n')}`;
+                }
+                return '';
+            })
+            .filter(practice => practice)
+            .join('\n');
+
+        // 生成组件使用场景建议
+        const scenarioSuggestions = this.schema.scenarios?.length ?
+            `\n\n推荐使用场景：\n${this.schema.scenarios.map(scenario => `- ${scenario}`).join('\n')}` : '';
+
+        this.examples.push({
+            input: `如何创建涉及到${props.map(item => `${item.title}`).join('、')}的${this.getComponentCName()}？`,
+            output: `这些属性的组合使用说明：\n${scenarioDescription}${relationDescription}\n\n示例代码：\n${componentTemplate}${bestPractices ? `\n\n最佳实践：\n${bestPractices}` : ''}${scenarioSuggestions}`
+        });
+
+    }
+    
+
+    /**
+     * 生成属性示例
+     */
+    private generatePropExamples(): void {
+        this.schema.props.forEach((prop) => {
+            // 合并属性描述和设置示例
+            let description = `${prop.description}\n`;
+            if (typeof prop.valueType === 'object' && prop.valueType.type === 'oneOf' && prop.valueType.items?.length) {
+                description += `可选值：\n${prop.valueType.items.map(item => `- ${item.value}：${item.title}`).join('\n')}\n`;
+            }
+            description += `\n示例：\n${this.generateComponentExample({ propName: prop.name })}`;
+
+            this.examples.push({
+                input: `${this.getComponentCName()}的${prop.name}属性是什么，如何使用？`,
+                output: `${this.getComponentCName()}的${prop.name}属性${description}`,
+            });
+
+            // 属性必填示例
+            if (prop.required) {
+                this.examples.push({
+                    input: `${this.getComponentCName()}的${prop.name}属性是必填的吗？`,
+                    output: `是的，${this.getComponentCName()}的${prop.name}属性是必填的。`,
+                });
+            }
+
+            // 可选值示例
+            if (typeof prop.valueType === 'object' && prop.valueType.type === 'oneOf' && prop.valueType.items?.length) {
+                // 为每个可选值生成示例
+                prop.valueType.items.forEach((item) => {
+                    const itemProps = { [prop.name]: item.value };
+                    const usageDescription = item.usage || `适用于${item.title}的场景`;
+                    this.examples.push({
+                        input: `${this.getComponentCName()}的${prop.name}属性设置为${item.value}是什么效果？`,
+                        output: `${this.getComponentCName()}的${prop.name}属性设置为${item.value}（${item.title}）时：\n- 使用场景：${usageDescription}\n ${this.generateComponentExampleBase({ props: itemProps, childrenContent: (item.value + item.title) || prop.title || this.schema.title })} `,
+                    });
+                });
+
+                // 生成最佳实践建议
+                if (prop.valueType.items.length > 1) {
+                    this.examples.push({
+                        input: `${this.getComponentCName()}的${prop.name}属性在不同场景下如何选择？`,
+                        output: `${this.getComponentCName()}的${prop.name}属性使用建议：\n${prop.valueType.items.map((item: IPropOptionDescription) => `- ${item.value}（${item.title}）：${item.usage || `适用于${item.title}的场景`}`).join('\n')}`,
+                    });
+                }
+            }
+        });
+
+        // 获取有效的属性（排除children属性）
+        const validProps = this.schema.props.filter(prop => prop.name !== 'children');
+        const propsCount = validProps.length;
+        
+        // 根据属性数量确定生成的示例数量（使用总属性数量作为基数，以生成更多示例）
+        const exampleCount = propsCount * 2;
+        
+        // Fisher-Yates洗牌算法
+        const shuffleArray = (array: IPropType[]) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
+        
+        // 生成示例
+        const shuffledProps = shuffleArray([...validProps]);
+        for (let i = 0; i < exampleCount; i++) {
+            // 根据总属性数量动态决定每个示例中的属性数量
+            // 使用总属性数量的1/2作为基准，最少2个，最多8个
+            const propsPerExample = Math.min(
+                Math.max(
+                    Math.ceil(propsCount / 3), // 减小分母以增加每个示例的属性数量
+                    2 // 增加最小属性数量
+                ),
+                Math.min(10, shuffledProps.length) // 增加最大属性数量上限
+            );
+            const startIndex = i * (propsPerExample / 2); // 减小步长以增加组合数量
+            // 确保不会超出数组边界
+            if (startIndex >= shuffledProps.length) break;
+            
+            const selectedProps = shuffledProps.slice(startIndex, Math.min(startIndex + propsPerExample, shuffledProps.length));
+            if (selectedProps.length > 0) {
+                this.generateMuiPropsExample(selectedProps);
+            }
+        }
+    }
+
     /**
      * 生成事件处理示例
      */
@@ -565,10 +672,10 @@ export class SchemaDataGenerator {
             const handle${event.name} = (${event.parameters?.map(p => p.name).join(', ') || ''}) => {
                 // ${event.description}
                 ${event.parameters?.length
-                    ? `
+                        ? `
                 // 事件参数:
                 ${event.parameters.map(p => `// - ${p.name}: ${p.type}${p.description ? ` (${p.description})` : ''}`).join('\n')}`
-                    : ''}
+                        : ''}
             }
             </script>
 
@@ -793,7 +900,7 @@ const handle${fakeMethod.charAt(0).toUpperCase() + fakeMethod.slice(1)} = () => 
                 output: `这段代码中，尝试调用${this.getComponentCName()}的${fakeMethod}方法，但该方法不存在。\n\n${this.schema.componentName}组件没有提供${fakeMethod}方法。${existingMethods.length > 0
                     ? `\n\n${this.schema.componentName}组件提供的方法有：\n${existingMethods.map(m => `- ${m}`).join('\n')}`
                     : `\n\n${this.schema.componentName}组件没有提供任何可调用的方法。`
-                }`,
+                    }`,
             });
         });
     }
@@ -836,10 +943,10 @@ onMounted(() => {
                 output: `这段代码中，尝试访问${this.getComponentCName()}实例的${fakeProp}属性或方法，但该属性或方法不存在。\n\n${this.schema.componentName}组件实例没有提供${fakeProp}属性或方法。${existingMethods.length > 0
                     ? `\n\n${this.schema.componentName}组件提供的方法有：\n${existingMethods.map(m => `- ${m}`).join('\n')}`
                     : ''
-                }${existingProps.length > 0
-                    ? `\n\n${this.schema.componentName}组件的属性有：\n${existingProps.slice(0, 5).map(p => `- ${p}`).join('\n')}${existingProps.length > 5 ? '\n- ...' : ''}`
-                    : ''
-                }`,
+                    }${existingProps.length > 0
+                        ? `\n\n${this.schema.componentName}组件的属性有：\n${existingProps.slice(0, 5).map(p => `- ${p}`).join('\n')}${existingProps.length > 5 ? '\n- ...' : ''}`
+                        : ''
+                    }`,
             });
         });
     }
