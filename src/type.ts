@@ -115,7 +115,7 @@ export interface IFuncPropValueType {
     /**
      * 事件的返回类型
      */
-    returnType?: IPropValueType
+    returnType?: IPropValueType | 'HTMLElement' | 'Promise' | 'any'
 }
 
 /**

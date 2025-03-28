@@ -53,7 +53,7 @@ async function processComponents() {
     let filesToProcess = files;
     if (mode === 'incomplete') {
         filesToProcess = files.filter((file) => {
-            const outputPath = path.join(outputDir, file);
+            const outputPath = path.join(outputDir, file.split('/').pop()!);
             return !fs.existsSync(outputPath);
         });
         log('info', `其中 ${filesToProcess.length} 个组件文件未处理`);
@@ -86,7 +86,7 @@ async function processComponents() {
                         docContent = fs.readFileSync(docsFilePath, 'utf-8');
                     }
 
-                    const metadata = await transformer.transform({ componentName, componentContent: content, docContent: docContent });
+                    const metadata = await transformer.transform({ componentName, componentContent: content, docContent });
 
                     const outputPath = path.join(outputDir, `${componentName}.ts`);
                     log('info', `正在保存转换结果到: ${outputPath}`);

@@ -6,5 +6,6 @@ export default antfu({
         'style/indent': ['error', 4],
         'style/semi': ['error', 'always'], // 强制使用分号
         'no-case-declarations': 'off',
+        'no-template-curly-in-string': 'off',
     },
 });

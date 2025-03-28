@@ -3,36 +3,105 @@ import type { IComponentMetadata } from '../type';
 export const componentMetaMeta: IComponentMetadata = {
   "title": "组件库",
   "componentName": "FComponentLibrary",
-  "description": "一个全面的前端组件库，包含按钮、表单、布局、导航、数据展示等多种类型的组件，适用于构建复杂的企业级应用。",
+  "description": "企业级前端组件库，包含表单、数据展示、导航、反馈等各类基础组件，支持Vue3技术栈。提供丰富的配置选项和灵活的扩展能力，适用于中后台管理系统开发。",
   "scenarios": [
-    "表单提交：使用按钮、输入框、选择器等组件构建复杂的表单，确保用户输入数据的完整性和准确性。",
-    "数据展示：使用表格、卡片、进度条等组件展示数据，提供清晰的数据可视化效果。",
-    "导航布局：使用菜单、标签页、面包屑等组件构建应用的导航结构，提升用户体验。",
-    "模态交互：使用模态框、抽屉、下拉菜单等组件实现交互式操作，增强应用的交互性。",
-    "文件上传：使用文件上传、拖拽上传等组件实现文件的上传功能，简化用户操作流程。"
+    "表单系统：使用Form、Input、Select等组件构建复杂表单，支持数据校验和联动逻辑",
+    "数据展示：通过Table、Card、Descriptions等组件展示结构化数据，支持分页和排序",
+    "导航菜单：使用Menu、Tabs组件构建多层级导航系统，支持权限控制",
+    "反馈交互：通过Modal、Drawer、Message等组件实现用户交互反馈",
+    "文件上传：使用Upload组件实现文件上传功能，支持拖拽上传和预览"
   ],
   "parent": {
     "types": [
-      "container",
-      "layout"
+      "application"
     ],
     "restrictions": []
   },
   "children": [
+    "FAlert",
+    "FBadge",
     "FButton",
+    "FCalendar",
+    "FCard",
+    "FCarousel",
+    "FCheckbox",
+    "FCheckboxGroup",
+    "FCollapse",
+    "FConfigProvider",
+    "FDatePicker",
+    "FDescriptions",
+    "FDivider",
+    "FDraggable",
+    "FDrawer",
+    "FDropdown",
+    "FEllipsis",
+    "FEmpty",
+    "FForm",
+    "FGrid",
+    "FImage",
     "FInput",
-    "FSelect",
-    "FTable",
-    "FModal",
+    "FInputFile",
+    "FInputFileDragger",
+    "FInputNumber",
+    "FLayout",
     "FMenu",
+    "FModal",
+    "FOption",
+    "FPagination",
+    "FRadio",
+    "FRadioGroup",
+    "FRate",
+    "FScrollbar",
+    "FSelect",
+    "FSelectCascader",
+    "FSelectTree",
+    "FSkeleton",
+    "FSpace",
+    "FSpin",
+    "FStep",
+    "FSwitch",
+    "FTable",
     "FTabs",
+    "FTag",
+    "FText",
+    "FTimePicker",
+    "FTimeline",
+    "FTooltip",
+    "FTransfer",
+    "FTree",
     "FUpload",
+    "FUploadDragger",
+    "FVirtualList",
+    "FTextHighlight",
     "FProgress",
-    "FTooltip"
+    "FFloatPane",
+    "FLink",
+    "FAvatar"
   ],
   "propRelations": [],
   "props": [],
   "events": [],
   "slots": [],
-  "exposes": []
+  "templates": [
+    {
+      "input": "如何创建一个基础表单？",
+      "output": "<!-- correct -->\n[场景说明] 创建包含输入框、下拉选择和提交按钮的表单\n[代码实现]\n<template>\n  <FForm :model=\"formData\" :rules=\"rules\">\n    <FFormItem label=\"用户名\" prop=\"username\">\n      <FInput v-model=\"formData.username\" />\n    </FFormItem>\n    <FFormItem label=\"城市\" prop=\"city\">\n      <FSelect v-model=\"formData.city\">\n        <FOption value=\"beijing\">北京</FOption>\n        <FOption value=\"shanghai\">上海</FOption>\n      </FSelect>\n    </FFormItem>\n    <FFormItem>\n      <FButton type=\"primary\" @click=\"submit\">提交</FButton>\n    </FFormItem>\n  </FForm>\n</template>\n[最佳实践] 使用FFormItem包裹每个表单项，统一管理校验规则"
+    },
+    {
+      "input": "表格分页怎么实现？",
+      "output": "<!-- correct -->\n[场景说明] 实现带分页功能的数据表格\n[代码实现]\n<template>\n  <FTable :data=\"tableData\" :columns=\"columns\" />\n  <FPagination \n    v-model:current=\"currentPage\"\n    :total=\"total\"\n    :page-size=\"pageSize\"\n    @change=\"handlePageChange\"\n  />\n</template>\n[最佳实践] 将分页组件与表格分离，通过currentPage控制当前页"
+    },
+    {
+      "input": "上传文件报错怎么解决？",
+      "output": "<!-- error -->\n[错误分析] 常见错误包括未设置action地址、文件大小限制和格式限制\n[正确代码]\n<FUpload\n  action=\"/api/upload\"\n  :max-size=\"5\"\n  accept=\"image/*\"\n  @error=\"handleError\"\n>\n  <FButton>点击上传</FButton>\n</FUpload>\n[注意事项] 确保后端接口地址正确，设置合理的文件大小和类型限制"
+    },
+    {
+      "input": "菜单组件不显示",
+      "output": "<!-- error -->\n[错误分析] 可能原因包括未正确配置菜单项或缺少路由设置\n[正确代码]\n<FMenu mode=\"horizontal\">\n  <FMenuItem key=\"home\">首页</FMenuItem>\n  <FSubMenu key=\"products\" title=\"产品\">\n    <FMenuItem key=\"product1\">产品1</FMenuItem>\n  </FSubMenu>\n</FMenu>\n[注意事项] 确保每个菜单项都有唯一的key属性，子菜单使用FSubMenu包裹"
+    },
+    {
+      "input": "模态框怎么居中显示？",
+      "output": "<!-- correct -->\n[场景说明] 实现居中显示的对话框\n[代码实现]\n<FModal \n  v-model:visible=\"visible\"\n  title=\"提示\"\n  centered\n>\n  <p>确认要执行此操作吗？</p>\n</FModal>\n[最佳实践] 使用centered属性使模态框居中，配合v-model控制显示状态"
+    }
+  ]
 };

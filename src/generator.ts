@@ -37,24 +37,24 @@ export class SchemaDataGenerator {
         if (prop.defaultValue) {
             return prop.defaultValue;
         }
-        
+
         // 获取函数参数
         let parameters = '';
-        if (typeof prop.valueType === 'object' && 
-            prop.valueType.type === 'func' && 
-            prop.valueType.parameters?.length) {
+        if (typeof prop.valueType === 'object'
+          && prop.valueType.type === 'func'
+          && prop.valueType.parameters?.length) {
             parameters = prop.valueType.parameters
                 .map(param => param.name)
                 .join(', ');
         }
-        
+
         // 生成函数体
         let functionBody = '  // 函数实现';
-        
+
         // 如果有返回类型，添加返回语句
-        if (typeof prop.valueType === 'object' && 
-            prop.valueType.type === 'func' && 
-            prop.valueType.returnType) {
+        if (typeof prop.valueType === 'object'
+          && prop.valueType.type === 'func'
+          && prop.valueType.returnType) {
             let returnValue = 'null';
             if (typeof prop.valueType.returnType === 'string') {
                 switch (prop.valueType.returnType) {
@@ -77,10 +77,10 @@ export class SchemaDataGenerator {
             }
             functionBody += `\n  return ${returnValue};`;
         }
-        
+
         return `function(${parameters}) {\n${functionBody}\n}`;
     }
-    
+
     /**
      * 生成属性值
      * @param prop 属性定义
@@ -134,7 +134,7 @@ export class SchemaDataGenerator {
                     result = null;
                     break;
                 case 'date':
-                    result = new Date().toString();
+                    result = new Date().toLocaleString();
                     break;
                 default:
                     result = null;
@@ -217,6 +217,7 @@ export class SchemaDataGenerator {
                     break;
                 case 'func':
                     result = this.generateFuncValue(prop);
+                    break;
                 default:
                     result = null;
             }
@@ -313,7 +314,7 @@ export class SchemaDataGenerator {
 
     /**
      * 生成组件示例代码
-     * @param propName 指定的属性名称
+     * @param {propName, childrenContent} 指定的属性名称
      * @returns 组件示例代码
      */
     private generateComponentExample(option?: { propName?: string, childrenContent?: string }): string {
@@ -340,7 +341,6 @@ export class SchemaDataGenerator {
         } = options;
 
         this.components.forEach((schema) => {
-           
             this.schema = schema;
 
             // 基本组件描述示例
@@ -609,12 +609,12 @@ ${exampleCode}`,
             // 添加错误样本示例
             this.generateErrorExamples();
 
-             // 处理组件自带的模板示例
-             if (schema.templates?.length) {
-                schema.templates.forEach(template => {
+            // 处理组件自带的模板示例
+            if (schema.templates?.length) {
+                schema.templates.forEach((template) => {
                     this.examples.push({
                         input: template.input,
-                        output: template.output
+                        output: template.output,
                     });
                 });
             }

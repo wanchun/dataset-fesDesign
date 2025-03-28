@@ -45,12 +45,62 @@ export const buttonMeta: IComponentMetadata = {
     ],
     props: [
         {
-            name: 'disabled',
-            title: '禁用状态',
+            name: 'boolDemo',
+            title: '布尔示例',
             valueType: 'bool',
             description: '是否禁用按钮',
             defaultValue: false,
-            example: false
+            example: false,
+        },
+        {
+            name: 'stringDemo',
+            title: '字符串示例',
+            valueType: 'string',
+            description: '按钮的类型',
+            example: 'primary',
+        },
+        {
+            name: 'numberDemo',
+            title: '数字示例',
+            valueType: 'number',
+            description: '按钮的圆角大小',
+            defaultValue: 4,
+            example: 8,
+        },
+        {
+            name: 'arrayDemo',
+            title: '数组示例',
+            valueType: 'array',
+            description: '按钮的颜色',
+            defaultValue: ['#1890ff', '#f50'],
+            example: ['#1890ff', '#f50'],
+        },
+        {
+            name: 'dateDemo',
+            title: '日期示例',
+            valueType: 'date',
+            description: 'xxx',
+            example: new Date(),
+        },
+        {
+            name: 'nodeDemo',
+            title: '节点示例',
+            valueType: 'node',
+            description: '按钮的图标',
+            example: '<ProductOutlined />',
+        },
+        {
+            name: 'objectDemo',
+            title: '对象示例',
+            valueType: 'object',
+            description: '应用的语言包配置，支持中英文等多种语言',
+            defaultValue: 'zhCN',
+            example: {
+                datePicker: {
+                    selectDate: '选择日期',
+                    selectTime: '选择时间',
+                },
+            },
         },
         {
             name: 'size',
@@ -80,102 +130,118 @@ export const buttonMeta: IComponentMetadata = {
             example: 'middle',
         },
         {
-            name: 'htmlType',
-            title: '按钮类型',
+            name: 'funcDemo',
+            title: '函数示例',
             valueType: {
-                type: 'oneOf',
-                items: [
+                type: 'func',
+                parameters: [
                     {
-                        value: 'button',
-                        title: '普通按钮',
-                        usage: '常规按钮交互场景，点击时触发onClick事件',
+                        name: 'data',
+                        type: 'array',
+                        description: '数据数组',
                     },
+                ],
+                returnType: 'string',
+
+            },
+            example: '() => "Hello, World!"',
+        },
+        {
+            name: 'oneOfTypeDemo',
+            title: '联合类型示例',
+            valueType: {
+                type: 'oneOfType',
+                value: [
+                    'number',
                     {
-                        value: 'submit',
-                        title: '提交按钮',
-                        usage: '表单提交场景，点击时自动触发表单的submit事件',
+                        type: 'func',
+                        returnType: 'number',
                     },
                 ],
             },
-            description: '设置按钮的原生type属性，影响按钮的默认行为',
-            defaultValue: 'button',
-            example: 'button',
+            example: '() => 123',
         },
         {
-            name: 'loading',
-            title: '加载状态',
-            valueType: 'bool',
-            description: '是否显示加载中状态',
-            defaultValue: false,
-            example: true,
-        },
-        {
-            name: 'long',
-            title: '长按钮',
-            valueType: 'bool',
-            description: '是否显示为长按钮',
-            defaultValue: false,
-            example: true,
-        },
-        {
-            name: 'throttle',
-            title: '节流时间',
-            valueType: 'number',
-            description: '点击事件的节流时间（毫秒），在指定时间间隔内重复点击只会触发一次回调，用于防止重复提交',
-            defaultValue: 300,
-            example: 500,
-        },
-        {
-            name: 'type',
-            title: '按钮风格',
+            name: 'arrayOfDemo',
+            title: '数组类型示例',
+            description: '数字数组示例',
             valueType: {
-                type: 'oneOf',
-                items: [
+                type: 'arrayOf',
+                value: 'number',
+            },
+            example: '[1, 2, 3]',
+        },
+        {
+            name: 'exactDemo',
+            title: '对象类型示例（所有属性都配置）',
+            valueType: {
+                type: 'exact',
+                value: [
                     {
-                        value: 'default',
-                        title: '默认',
-                        usage: '常规场景的默认按钮样式，适用于一般操作',
+                        name: 'value',
+                        title: '选项值',
+                        valueType: {
+                            type: 'oneOfType',
+                            value: [
+                                'string',
+                                'number',
+                            ],
+                        },
+                        example: '1',
                     },
                     {
-                        value: 'primary',
-                        title: '主要',
-                        usage: '需要突出强调的主要操作按钮，如表单提交、确认等重要操作',
+                        name: 'label',
+                        title: '显示文本',
+                        valueType: 'string',
+                        example: '选项1',
                     },
                     {
-                        value: 'text',
-                        title: '文本',
-                        usage: '轻量级的文本按钮，用于次要操作，保持界面清爽',
+                        name: 'disabled',
+                        title: '禁用状态',
+                        valueType: 'bool',
+                        example: false,
                     },
                     {
-                        value: 'link',
-                        title: '链接',
-                        usage: '链接形式的按钮，用于导航跳转或触发外部链接',
-                    },
-                    {
-                        value: 'info',
-                        title: '信息',
-                        usage: '用于展示信息的按钮样式，传达中性的信息状态',
-                    },
-                    {
-                        value: 'success',
-                        title: '成功',
-                        usage: '表示成功状态的按钮样式，用于操作成功的反馈',
-                    },
-                    {
-                        value: 'warning',
-                        title: '警告',
-                        usage: '表示警告状态的按钮样式，提醒用户需要注意',
-                    },
-                    {
-                        value: 'danger',
-                        title: '危险',
-                        usage: '表示危险操作的按钮样式，如删除等破坏性操作',
+                        name: 'icon',
+                        title: '图标组件',
+                        valueType: 'node',
+                        example: '<ProductOutlined />',
                     },
                 ],
             },
-            description: '按钮的样式风格，影响按钮的外观和语义',
-            defaultValue: 'default',
-            example: 'primary',
+            example: '{ a: 1, b: 2 }',
+            description: '菜单项数据结构，支持函数式label和自定义图标',
+            defaultValue: [],
+        },
+        {
+            name: 'shapeDemo',
+            title: '对象示例（只要求必须有配置的属性，其他属性不要求）',
+            valueType: {
+                type: 'shape',
+                value: [
+                    {
+                        name: 'value',
+                        title: '选项值',
+                        valueType: {
+                            type: 'oneOfType',
+                            value: [
+                                'string',
+                                'number',
+                            ],
+                        },
+                        example: '1',
+                    },
+                    {
+                        name: 'label',
+                        title: '显示文本',
+                        valueType: 'string',
+                        example: '选项1',
+                    },
+                ],
+            },
+            example: '{ a: 1, b: 2 }',
+            description: '菜单项数据结构，支持函数式label和自定义图标',
+            defaultValue: [],
         },
     ],
     events: [
@@ -203,7 +269,7 @@ export const buttonMeta: IComponentMetadata = {
             input: '重要按钮',
             output: `<FButton type="primary">
             Default
-        </FButton>`
+        </FButton>`,
         },
         {
             input: 'Icon 按钮',
@@ -211,7 +277,7 @@ export const buttonMeta: IComponentMetadata = {
             <template #icon>
                 <ProductOutlined />
             </template>
-        </FButton>`
-        }
-    ]
+        </FButton>`,
+        },
+    ],
 };

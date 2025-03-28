@@ -32,7 +32,7 @@ export function validateMetadata(metadata: any, componentName: string): { valid:
 
     // 验证propRelations字段
     validatePropRelations(metadata, errors);
-    
+
     // 验证templates字段
     validateTemplates(metadata, errors);
 
@@ -111,7 +111,7 @@ function validateProps(metadata: any, errors: string[]): void {
 function validatePropType(valueType: any, path: string, errors: string[]): void {
     // 如果是基础类型
     if (typeof valueType === 'string') {
-        const basicTypes = basicPropValueList;
+        const basicTypes = [...basicPropValueList, 'any', 'HTMLElement', 'Element', 'Promise'];
         if (!basicTypes.includes(valueType)) {
             errors.push(`${path}不是有效的基础类型，有效值为: ${basicTypes.join(', ')}`);
         }
@@ -558,13 +558,15 @@ function validateTemplates(metadata: any, errors: string[]): void {
         // 检查必填字段
         if (!template.input) {
             errors.push(`templates[${i}]缺少必填字段: input`);
-        } else if (typeof template.input !== 'string') {
+        }
+        else if (typeof template.input !== 'string') {
             errors.push(`templates[${i}].input必须是字符串`);
         }
 
         if (!template.output) {
             errors.push(`templates[${i}]缺少必填字段: output`);
-        } else if (typeof template.output !== 'string') {
+        }
+        else if (typeof template.output !== 'string') {
             errors.push(`templates[${i}].output必须是字符串`);
         }
     }

@@ -1,200 +1,278 @@
 import type { IComponentMetadata } from '../type';
 
 export const messageMeta: IComponentMetadata = {
-    title: '按钮',
-    componentName: 'FButton',
-    description: '基础按钮组件，用于在用户界面中触发各种操作。支持多种样式和状态，适用于表单提交、对话框确认等场景。',
+    title: '消息提示',
+    componentName: 'FMessage',
+    description: '全局消息提示组件，用于向用户反馈操作结果。支持多种消息类型、自定义样式和关闭功能，适用于系统通知、操作反馈等场景。',
     scenarios: [
-        '表单提交：在表单底部使用primary类型按钮，用于触发表单提交操作，确保用户明确提交意图。',
-        '对话框确认：在模态框底部使用default或primary类型按钮，用于关键操作确认，强调操作重要性。',
-        '工具栏操作：在表格工具栏中使用text或link类型按钮，用于执行批量操作，保持界面简洁。',
-        '页面导航：使用link类型按钮进行页面或功能导航，提供清晰的用户引导。',
-        '状态切换：使用text类型按钮切换不同状态，保持界面一致性。',
-        '危险操作：使用danger类型按钮执行删除等危险操作，明确警示用户。',
-        '信息提示：使用info类型按钮展示提示信息，提供友好的用户反馈。',
-        '成功提示：使用success类型按钮展示成功信息，增强用户操作信心。',
-        '警告提示：使用warning类型按钮展示警告信息，提醒用户注意潜在风险。',
+        '表单提交反馈：在用户提交表单后显示成功或错误消息，提供明确的操作结果反馈',
+        '系统通知：展示系统级通知信息，如新消息提醒或系统维护公告',
+        '操作确认：在执行关键操作前显示确认提示，防止误操作',
+        '异步操作状态：在长时间异步操作期间显示加载状态或完成提示',
+        '错误处理：在接口请求失败或数据验证不通过时显示错误提示',
     ],
     parent: {
         types: [
             'container',
             'layout',
         ],
-        restrictions: [
-            {
-                parent: 'FFormItem',
-                description: '表单项场景下必须放在表单项组件内',
-            },
-            {
-                parent: 'FSpace',
-                description: '间距布局场景下必须放在间距组件内',
-            },
-        ],
+        restrictions: [],
     },
     children: [],
     propRelations: [
         {
-            source: 'loading',
-            target: 'disabled',
-            effect: 'loading状态时禁用点击',
+            source: 'duration',
+            target: 'closable',
+            effect: '当duration为0时，建议设置closable为true',
             notes: [
-                '当按钮处于加载状态时自动禁用点击',
-                '适用于异步提交场景防止重复提交',
+                '非自动关闭的消息需要提供手动关闭方式',
+                '防止消息长时间停留影响用户体验',
             ],
         },
     ],
     props: [
         {
-            name: 'children',
-            title: '按钮内容',
-            propType: 'string',
-            description: '按钮的文本内容',
-        },
-        {
-            name: 'disabled',
-            title: '禁用状态',
-            propType: 'bool',
-            description: '是否禁用按钮',
-            defaultValue: false,
-        },
-        {
-            name: 'size',
-            title: '尺寸',
-            propType: {
-                type: 'oneOf',
-                items: [
+            name: 'content',
+            title: '消息内容',
+            valueType: {
+                type: 'oneOfType',
+                value: [
+                    'string',
                     {
-                        name: 'small',
-                        title: '小',
-                        usage: '紧凑场景使用，如表单内联按钮',
-                    },
-                    {
-                        name: 'middle',
-                        title: '中',
-                        usage: '常规尺寸，适合大多数场景',
-                    },
-                    {
-                        name: 'large',
-                        title: '大',
-                        usage: '需要突出操作的页面重点区域',
+                        type: 'func',
+                        returnType: 'node',
                     },
                 ],
             },
-            description: '按钮的尺寸大小，影响按钮的展示尺寸',
-            defaultValue: 'middle',
+            description: '消息提示内容，可以是字符串或返回VNode的函数',
+            required: true,
+            example: '\'操作成功\'',
         },
         {
-            name: 'htmlType',
-            title: '按钮类型',
-            propType: {
-                type: 'oneOf',
-                items: [
-                    {
-                        name: 'button',
-                        title: '普通按钮',
-                        usage: '常规按钮交互场景，点击时触发onClick事件',
-                    },
-                    {
-                        name: 'submit',
-                        title: '提交按钮',
-                        usage: '表单提交场景，点击时自动触发表单的submit事件',
-                    },
-                ],
+            name: 'duration',
+            title: '显示时长',
+            valueType: 'number',
+            description: '自动关闭的延时，单位秒，设置为0时不自动关闭',
+            defaultValue: 3,
+            example: 5,
+        },
+        {
+            name: 'icon',
+            title: '自定义图标',
+            valueType: {
+                type: 'func',
+                returnType: 'node',
             },
-            description: '设置按钮的原生type属性，影响按钮的默认行为',
-            defaultValue: 'button',
+            description: '自定义消息图标，返回VNode的函数',
+            example: '() => <BellOutlined />',
         },
         {
-            name: 'loading',
-            title: '加载状态',
-            propType: 'bool',
-            description: '是否显示加载中状态',
+            name: 'closable',
+            title: '可关闭',
+            valueType: 'bool',
+            description: '是否显示关闭按钮',
             defaultValue: false,
+            example: true,
         },
         {
-            name: 'long',
-            title: '长按钮',
-            propType: 'bool',
-            description: '是否显示为长按钮',
+            name: 'colorful',
+            title: '彩色样式',
+            valueType: 'bool',
+            description: '是否使用彩色背景样式',
             defaultValue: false,
+            example: true,
         },
         {
-            name: 'throttle',
-            title: '节流时间',
-            propType: 'number',
-            description: '点击事件的节流时间（毫秒），在指定时间间隔内重复点击只会触发一次回调，用于防止重复提交',
-            defaultValue: 300,
-        },
-        {
-            name: 'type',
-            title: '按钮风格',
-            propType: {
-                type: 'oneOf',
-                items: [
-                    {
-                        name: 'default',
-                        title: '默认',
-                        usage: '常规场景的默认按钮样式，适用于一般操作',
-                    },
-                    {
-                        name: 'primary',
-                        title: '主要',
-                        usage: '需要突出强调的主要操作按钮，如表单提交、确认等重要操作',
-                    },
-                    {
-                        name: 'text',
-                        title: '文本',
-                        usage: '轻量级的文本按钮，用于次要操作，保持界面清爽',
-                    },
-                    {
-                        name: 'link',
-                        title: '链接',
-                        usage: '链接形式的按钮，用于导航跳转或触发外部链接',
-                    },
-                    {
-                        name: 'info',
-                        title: '信息',
-                        usage: '用于展示信息的按钮样式，传达中性的信息状态',
-                    },
-                    {
-                        name: 'success',
-                        title: '成功',
-                        usage: '表示成功状态的按钮样式，用于操作成功的反馈',
-                    },
-                    {
-                        name: 'warning',
-                        title: '警告',
-                        usage: '表示警告状态的按钮样式，提醒用户需要注意',
-                    },
-                    {
-                        name: 'danger',
-                        title: '危险',
-                        usage: '表示危险操作的按钮样式，如删除等破坏性操作',
-                    },
-                ],
+            name: 'afterClose',
+            title: '关闭回调',
+            valueType: {
+                type: 'func',
+                returnType: 'any',
             },
-            description: '按钮的样式风格，影响按钮的外观和语义',
-            defaultValue: 'default',
+            description: '消息关闭后的回调函数',
+            example: '() => console.log(\'message closed\')',
         },
     ],
-    events: [
+    events: [],
+    slots: [],
+    exposes: [
         {
-            name: 'onClick',
-            description: '点击按钮时触发',
+            name: 'info',
+            description: '显示普通消息',
             parameters: [
                 {
-                    name: 'event',
-                    type: 'MouseEvent',
-                    description: '点击事件对象',
+                    name: 'content',
+                    type: 'string',
+                    description: '消息内容',
+                },
+                {
+                    name: 'duration',
+                    type: 'number',
+                    description: '显示时长(秒)',
                 },
             ],
         },
-    ],
-    slots: [
         {
-            name: 'default',
-            description: '按钮的内容，可以是文本或其他元素',
-            required: true,
+            name: 'success',
+            description: '显示成功消息',
+            parameters: [
+                {
+                    name: 'content',
+                    type: 'string',
+                    description: '消息内容',
+                },
+                {
+                    name: 'duration',
+                    type: 'number',
+                    description: '显示时长(秒)',
+                },
+            ],
+        },
+        {
+            name: 'error',
+            description: '显示错误消息',
+            parameters: [
+                {
+                    name: 'content',
+                    type: 'string',
+                    description: '消息内容',
+                },
+                {
+                    name: 'duration',
+                    type: 'number',
+                    description: '显示时长(秒)',
+                },
+            ],
+        },
+        {
+            name: 'warning',
+            description: '显示警告消息',
+            parameters: [
+                {
+                    name: 'content',
+                    type: 'string',
+                    description: '消息内容',
+                },
+                {
+                    name: 'duration',
+                    type: 'number',
+                    description: '显示时长(秒)',
+                },
+            ],
+        },
+        {
+            name: 'warn',
+            description: '显示警告消息(同warning)',
+            parameters: [
+                {
+                    name: 'content',
+                    type: 'string',
+                    description: '消息内容',
+                },
+                {
+                    name: 'duration',
+                    type: 'number',
+                    description: '显示时长(秒)',
+                },
+            ],
+        },
+        {
+            name: 'config',
+            description: '全局配置',
+            parameters: [
+                {
+                    name: 'options',
+                    type: 'object',
+                    description: '配置选项',
+                },
+            ],
+        },
+        {
+            name: 'destroy',
+            description: '关闭所有消息',
+            parameters: [],
+        },
+    ],
+    templates: [
+        {
+            input: '如何显示一个普通消息提示？',
+            output: '[场景说明] 需要在用户操作后显示普通信息提示\n[代码实现] FMessage.info(\'这是一条普通消息\');\n[最佳实践] 适用于非关键性操作反馈，默认3秒后自动消失',
+        },
+        {
+            input: '显示一个5秒后自动关闭的成功消息',
+            output: '[场景说明] 表单提交成功后需要显示较长时间的成功提示\n[代码实现] FMessage.success(\'操作成功\', 5);\n[最佳实践] 重要操作反馈可适当延长显示时间',
+        },
+        {
+            input: '错误消息不自动关闭',
+            output: '[场景说明] 关键错误需要用户手动确认\n[代码实现] FMessage.error({ content: \'操作失败\', duration: 0, closable: true });\n[注意事项] 必须设置closable为true，否则用户无法关闭消息',
+        },
+        {
+            input: '自定义消息内容和图标',
+            output: '[场景说明] 需要显示带自定义图标和样式的消息\n[代码实现] FMessage.info({ content: () => h(\'div\', { style: { color: \'red\' } }, \'自定义内容\'), icon: () => <BellOutlined /> });\n[最佳实践] 使用函数式组件实现高度自定义',
+        },
+        {
+            input: '显示彩色背景的警告消息',
+            output: '[场景说明] 需要突出显示重要警告\n[代码实现] FMessage.warning({ content: \'请注意风险\', colorful: true });\n[最佳实践] 彩色样式更醒目，适合重要提示',
+        },
+        {
+            input: '关闭所有消息',
+            output: '[场景说明] 需要一次性清除所有消息提示\n[代码实现] FMessage.destroy();\n[注意事项] 会立即关闭所有通过FMessage显示的消息',
+        },
+        {
+            input: '全局配置消息默认显示时间',
+            output: '[场景说明] 需要统一调整所有消息的默认显示时长\n[代码实现] FMessage.config({ duration: 5 });\n[注意事项] 此配置会影响后续所有消息的默认显示时间',
+        },
+        {
+            input: '显示带关闭按钮的消息',
+            output: '[场景说明] 需要允许用户手动关闭消息\n[代码实现] FMessage.info({ content: \'可关闭消息\', closable: true });\n[最佳实践] 对于重要消息建议提供关闭按钮',
+        },
+        {
+            input: '错误示例：忘记设置content',
+            output: '[错误分析] 缺少必填的content属性\n[正确代码] FMessage.info({ content: \'消息内容\' });\n[注意事项] content是必填属性，可以是字符串或函数',
+        },
+        {
+            input: '错误示例：duration传字符串',
+            output: '[错误分析] duration应为数字类型\n[正确代码] FMessage.info(\'消息\', 5);\n[注意事项] duration参数必须为number类型，表示秒数',
+        },
+        {
+            input: '错误示例：colorful拼写错误',
+            output: '[错误分析] 属性名拼写错误\n[正确代码] FMessage.info({ content: \'消息\', colorful: true });\n[注意事项] 正确属性名为colorful，不是colourful',
+        },
+        {
+            input: '空内容消息测试',
+            output: '[场景说明] 测试空内容消息的显示\n[代码实现] FMessage.info(\'\');\n[注意事项] 空内容消息仍会显示但无实际意义，应避免使用',
+        },
+        {
+            input: '极长持续时间测试',
+            output: '[场景说明] 测试极长显示时间的消息\n[代码实现] FMessage.info({ content: \'测试消息\', duration: 3600 });\n[注意事项] 过长的duration应配合closable使用',
+        },
+        {
+            input: '大量消息同时显示',
+            output: '[场景说明] 测试同时显示多条消息\n[代码实现] for(let i=0; i<10; i++) { FMessage.info(`消息${i}`); }\n[注意事项] 可通过config设置maxCount限制最大显示数量',
+        },
+        {
+            input: '怎么显示一个消息提示框',
+            output: '[场景说明] 基础消息提示使用\n[代码实现] FMessage.info(\'提示信息\');\n[最佳实践] 最简单的消息提示用法',
+        },
+        {
+            input: '消息提示能不能改颜色',
+            output: '[场景说明] 自定义消息样式\n[代码实现] FMessage.info({ content: () => h(\'div\', { style: { color: \'blue\' } }, \'蓝色消息\') });\n[最佳实践] 通过函数式content实现样式自定义',
+        },
+        {
+            input: '消息提示咋关不掉',
+            output: '[错误分析] 可能缺少closable设置\n[正确代码] FMessage.info({ content: \'消息\', closable: true });\n[注意事项] 非自动关闭的消息必须设置closable',
+        },
+        {
+            input: '覆盖默认消息样式',
+            output: '[场景说明] 自定义全局消息样式\n[代码实现] // 通过CSS覆盖 .f-message-notice { background: #f0f0f0; }\n[注意事项] 谨慎修改全局样式，可能影响其他组件',
+        },
+        {
+            input: '与Modal组件配合使用',
+            output: '[场景说明] 在模态框中显示消息\n[代码实现] FMessage.config({ getContainer: () => document.querySelector(\'.modal-container\') });\n[最佳实践] 确保消息显示在正确的容器内',
+        },
+        {
+            input: '与表单验证配合使用',
+            output: '[场景说明] 表单验证错误提示\n[代码实现] if(!valid) { FMessage.error(\'请填写必填字段\'); }\n[最佳实践] 在验证失败时显示错误提示',
         },
     ],
 };

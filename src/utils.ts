@@ -8,7 +8,7 @@ export function toArray<T>(value: T | T[]): NonNullable<T>[] {
 }
 
 export function log(level: 'info' | 'warn' | 'error' | 'success', message: string, ...args: any[]) {
-    const prefix = `[${new Date().toISOString()}] `;
+    const prefix = `[${new Date().toLocaleString()}] `;
     const emoji = {
         info: 'ℹ️ ',
         warn: '⚠️ ',
